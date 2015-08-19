@@ -14,7 +14,7 @@
 (require 'diminish)
 (require 'bind-key)
 
-(use- package cl-generic :ensure t)
+(use-package cl-generic :ensure t)
 
 
 (use-package paradox :ensure t)
@@ -107,7 +107,7 @@
             (trans . "<span class=\"task-in-progress\">[-]</span>"))))
 
 
-(use-package 'ox-reveal
+(use-package ox-reveal
 	     :ensure t
 	     :config
 	     (setq org-reveal-root "file:///home/plaintext/reveal.js"))
