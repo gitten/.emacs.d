@@ -14,6 +14,9 @@
 (require 'diminish)
 (require 'bind-key)
 
+(use- package cl-generic :ensure t)
+
+
 (use-package paradox :ensure t)
 ;(load "~/.emacs.d/.paradox-token.el")
 
@@ -92,7 +95,41 @@
 
 ;;pdf and epub tools
 
+;;the org
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cb" 'org-iswitchb)
+(setq org-html-checkbox-type 'unicode)
+(setq org-html-checkbox-types
+ '((unicode (on . "<span class=\"task-done\">&#x2611;</span>")
+            (off . "<span class=\"task-todo\">&#x2610;</span>")
+            (trans . "<span class=\"task-in-progress\">[-]</span>"))))
+
+
+(use-package 'ox-reveal
+	     :ensure t
+	     :config
+	     (setq org-reveal-root "file:///home/plaintext/reveal.js"))
+
+(use-package org-bullets
+	     :ensure t
+	     :init
+	     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 ;;theme
 (use-package base16-theme :ensure t)
 (use-package nyan-mode :ensure t :demand t);Demand the NYAN!!
 (load "~/.emacs.d/customize.el")
+
+;;python
+
+(use-package ein :ensure t)
+(use-package jedi
+	     :ensure t
+	     :config
+	     (add-hook 'python-mode-hook 'jedi:setup)
+	     (setq jedi:complete-on-dot))
+(use-package pydoc-info
+	     :ensure t
+	     :load-path "/path/to/pydoc-info")
+(use-package matlab :ensure t)
