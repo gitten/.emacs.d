@@ -52,6 +52,7 @@
 (use-package smartparens
   :ensure t 
   :demand t
+  :diminish smartparens-mode
   :config
   (require 'smartparens-config)
   (smartparens-global-mode t))
@@ -59,6 +60,7 @@
 (use-package undo-tree
   :ensure t
   :demand t
+  :diminish undo-tree-mode
   :config 
   (global-undo-tree-mode)) ;;explore more settings 
 
@@ -69,6 +71,44 @@
 	mozc-candidate-style 'overlay))
 
 (use-package dired+ :ensure t)
+
+(use-package magit :ensure t)
+
+;;auto completion
+(use-package company-c-headers :ensure t)
+
+(use-package company-auctex
+             :ensure t
+             :init(company-auctex-init))
+
+(use-package company-jedi :ensure t)
+(use-package company-web :ensure t)
+(use-package company-ghc :ensure t)
+(use-package company-ghci :ensure t)
+
+(use-package company
+             :ensure t
+             :demand t
+             :diminish company-mode
+             :config
+             (global-company-mode )
+;             (add-hook 'after-init-hook 'global-company-mode)
+             (add-to-list 'company-backends '(company-c-headers))
+             (add-to-list 'company-backends '(company-auctex))
+             (add-to-list 'company-backends '(company-jedi))
+             (add-to-list 'company-backends '(company-web-html))
+             (add-to-list 'company-backends '(company-web-jade))
+             (add-to-list 'company-backends '(company-web-slim))
+             (add-to-list 'company-backends '(company-ghc))
+             (add-to-list 'company-backends '(company-ghci))
+             )
+
+;;lisp
+(use-package adjust-parens
+             :ensure t
+             :config
+             (local-set-key (kbd "TAB") 'lisp-indent-adjust-parens);for terminal?
+             (local-set-key (kbd "<backtab>") 'lisp-dedent-adjust-parens))
 
 ;;helm
 (use-package helm
@@ -83,17 +123,22 @@
 	helm-M-x-fuzzy-match t)
   (helm-mode)
   (helm-adaptative-mode 1)
-  :bind (("C-h a" . helm-apropos)
-	 ("C-x C-b" . helm-buffers-list)
-	 ("M-y" . helm-show-kill-ring)
-	 ("M-x" . helm-M-x)
-	 ("C-x c o" . helm-occur)
-	 ("C-x c y" . helm-yas-complete)
-	 ("C-x c SPC" . helm-all-mark-rings)
-         ("<tab>" . helm-execute-persistent-action)
-         ("C-i" . helm-select-action)
-         ("C-z" . helm-execute-persistent-action) ;for emacs in terminal
-	 ))
+  :bind
+  (("C-h a" . helm-apropos)
+   ("C-x C-b" . helm-buffers-list)
+   ("M-y" . helm-show-kill-ring)
+   ("M-x" . helm-M-x)
+   ("C-x c o" . helm-occur)
+   ("C-x c y" . helm-yas-complete)
+   ("C-x c SPC" . helm-all-mark-rings))
+  :config
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent acgtion
+(define-key helm-map (kbd "C-z") 'helm-execute-persistent-action) ; make TAB works in terminal
+(define-key helm-map (kbd "C-i")  'helm-select-action)) ; list action
+
+  ) ;for emacs in terminal
+
+
 (use-package helm-descbinds
   :ensure t
   :init
@@ -175,6 +220,18 @@
 
 
 ;;theme
+(use-package mode-icons
+             :ensure t
+             :demand t
+             :init
+             (mode-icons-mode))
 (use-package base16-theme :ensure t)
-(use-package nyan-mode :ensure t :demand t);Demand the NYAN!!
+(use-package nyan-mode
+             :ensure t
+             :demand t
+             :init
+             
+             (nyan-mode)
+             (add-hook 'eshell-load-hook 'nyan-prompt-enable))
+
 (load "~/.emacs.d/customize-init.el")
