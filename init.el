@@ -89,6 +89,9 @@
 	 ("C-x c o" . helm-occur)
 	 ("C-x c y" . helm-yas-complete)
 	 ("C-x c SPC" . helm-all-mark-rings)
+         ("<tab>" . helm-execute-persistent-action)
+         ("C-i" . helm-select-action)
+         ("C-z" . helm-execute-persistent-action) ;for emacs in terminal
 	 ))
 (use-package helm-descbinds
   :ensure t
