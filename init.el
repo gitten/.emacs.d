@@ -74,7 +74,7 @@
 (use-package helm
   :ensure t
   :diminish helm-mode
-  :init
+  :config
   (require 'helm-config)
   (setq helm-quick-update t
 	helm-M-x-requires-pattern nil
@@ -82,6 +82,7 @@
 	helm-recentf-fuzzy-match t
 	helm-M-x-fuzzy-match t)
   (helm-mode)
+  (helm-adaptative-mode 1)
   :bind (("C-h a" . helm-apropos)
 	 ("C-x C-b" . helm-buffers-list)
 	 ("M-y" . helm-show-kill-ring)
