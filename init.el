@@ -110,6 +110,11 @@
              (local-set-key (kbd "TAB") 'lisp-indent-adjust-parens);for terminal?
              (local-set-key (kbd "<backtab>") 'lisp-dedent-adjust-parens))
 
+(use-package pretty-lambdada
+  :ensure t
+  :init
+  (global-pretty-lambda-mode))
+
 ;;helm
 (use-package helm
   :ensure t
@@ -135,9 +140,6 @@
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent acgtion
 (define-key helm-map (kbd "C-z") 'helm-execute-persistent-action) ; make TAB works in terminal
 (define-key helm-map (kbd "C-i")  'helm-select-action)) ; list action
-
-  ) ;for emacs in terminal
-
 
 (use-package helm-descbinds
   :ensure t
