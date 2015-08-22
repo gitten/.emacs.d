@@ -20,7 +20,7 @@
 (use-package paradox :ensure t)
 ;(load "~/.emacs.d/.paradox-token.el")
 
-(setq custom-file "~/.emacs.d/customize.el")
+(setq custom-file "~/.emacs.d/customize-init.el")
 
 (setq backup-directory-alist '((".*" . "~/.emacs.d/backups")))
 (setq delete-old-versions -1)
@@ -44,7 +44,10 @@
 (scroll-bar-mode -1)
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;line numbers
+;; no tabs
+(setq-default indent-tabs-mode nil)
+
+;;line numbers
 
 (use-package smartparens
   :ensure t 
@@ -116,10 +119,8 @@
 	     :ensure t
 	     :init
 	     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-;;theme
-(use-package base16-theme :ensure t)
-(use-package nyan-mode :ensure t :demand t);Demand the NYAN!!
-(load "~/.emacs.d/customize.el")
+
+
 
 ;;python
 
@@ -129,7 +130,48 @@
 	     :config
 	     (add-hook 'python-mode-hook 'jedi:setup)
 	     (setq jedi:complete-on-dot))
-(use-package pydoc-info
+(use-package pydoc-info :ensure t) ; :load-path "/path/to/pydoc-info")
+(use-package matlab-mode :ensure t)
+
+;;web-mode
+(use-package web-mode
 	     :ensure t
-	     :load-path "/path/to/pydoc-info")
-(use-package matlab :ensure t)
+	     :config
+	     (add-to-list 'auto-mode-alist '(("\\.phtml\\'" . web-mode)
+					     ("\\.tpl\\.php\\'" . web-mode)
+					     ("\\.[agj]sp\\'" . web-mode)
+					     ("\\.as[cp]x\\'" . web-mode)
+					     ("\\.erb\\'" . web-mode)
+					     ("\\.mustache\\'" . web-mode)
+					     ("\\.djhtml\\'" . web-mode)
+					     ("\\.html?\\'" . web-mode)))
+	     (setq web-mode-engines-alist '(("django" . "\\.html\\'")))
+	     (defun my-web-mode-hook ()
+	       "Hooks for Web mode."
+	       (setq web-mode-markup-indent 2)
+	       (setq web-mode-css-indent-offset 2)
+	       (setq web-mode-code-indent-offset 2)
+	       (setq web-mode-enable-css-colorization t)
+	       (setq web-mode-enable-block-face t)
+	       (setq web-mode-enable-part-face t)
+	       (setq web-mode-enable-heredoc-fontification t)
+	       (setq web-mode-enable-current-element-highlight t)
+	       (setq web-mode-enable-current-column-highlight t)
+	       ;(setq web-mode-enable-auto-pairing t)
+	       )	       
+	     (add-hook 'web-mode-hook 'my-web-mode-hook))
+
+
+
+
+
+
+
+
+
+
+
+;;theme
+(use-package base16-theme :ensure t)
+(use-package nyan-mode :ensure t :demand t);Demand the NYAN!!
+(load "./customize-init.el")
