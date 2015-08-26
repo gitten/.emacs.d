@@ -161,10 +161,10 @@
             (trans . "<span class=\"task-in-progress\">[-]</span>"))))
 
 
-(use-package ox-reveal
-	     :ensure t
-	     :config
-	     (setq org-reveal-root "file:///home/plaintext/reveal.js"))
+;; (use-package ox-reveal
+;; 	     :ensure t
+;; 	     :config
+;; 	     (setq org-reveal-root "file:///home/plaintext/reveal.js"))
 
 (use-package org-bullets
 	     :ensure t
