@@ -5,6 +5,10 @@
   ;; For important compatibility libraries like cl-lib
   (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
 (package-initialize)
+
+(unless package-archive-contents
+  (package-refresh-contents))
+
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 
@@ -175,7 +179,7 @@
 
 ;;python
 
-(use-package ein :ensure t)
+;;(use-package ein :ensure t) look into ob-ipython
 (use-package jedi
 	     :ensure t
 	     :config
