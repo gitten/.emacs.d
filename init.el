@@ -111,12 +111,11 @@
              )
 
 ;;lisp
-(use-package adjust-parens
-  
-             :ensure t
-             :init
-             (local-set-key (kbd "TAB") 'lisp-indent-adjust-parens);for terminal?
-             (local-set-key (kbd "<backtab>") 'lisp-dedent-adjust-parens))
+;; (use-package adjust-parens
+;;              :ensure t
+;;              :init
+;;              (local-set-key (kbd "TAB") 'lisp-indent-adjust-parens);for terminal?
+;;              (local-set-key (kbd "<backtab>") 'lisp-dedent-adjust-parens))
 
 (use-package pretty-lambdada
   :ensure t
@@ -145,9 +144,13 @@
    ("C-x c y" . helm-yas-complete)
    ("C-x c SPC" . helm-all-mark-rings))
   :config
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent acgtion
-(define-key helm-map (kbd "C-z") 'helm-execute-persistent-action) ; make TAB works in terminal
-(define-key helm-map (kbd "C-i")  'helm-select-action)) ; list action
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent acgtion
+  (define-key helm-map (kbd "C-z") 'helm-execute-persistent-action) ; make TAB work in terminal
+  (define-key helm-map (kbd "C-i")  'helm-select-action) ; list action
+  (setq helm-split-window-in-side-p t ; open helm buffer inside current window
+        helm-move-to-line-cycle-in-source t ; cycle back when reaching top or bottom of source
+        helm-ff-search-library-in-sexp t
+        helm-ff-file-name-history-use-recentf t))
 
 (use-package helm-descbinds
   :ensure t
@@ -176,7 +179,7 @@
 (use-package ox-reveal
  	     :ensure t
  	     :config
- 	     (setq org-reveal-root "file:///home/plaintext/reveal.js"))
+ 	     (setq org-reveal-root "file:///~/reveal.js"))
 
 (use-package org-bullets
 	     :ensure t
@@ -205,6 +208,8 @@
 	     (setq jedi:complete-on-dot))
 (use-package pydoc-info :ensure t) ; :load-path "/path/to/pydoc-info")
 (use-package matlab-mode :ensure t)
+(use-package ein :ensure t)
+(use-package matlab :ensure t)
 
 ;;web-mode
 (use-package web-mode
@@ -254,8 +259,8 @@
              :ensure t
              :demand t
              :init
-             
              (nyan-mode)
              (add-hook 'eshell-load-hook 'nyan-prompt-enable))
 
+(use-package mode-icons :ensure t :demand t)
 (load "~/.emacs.d/customize-init.el")
