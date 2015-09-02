@@ -43,6 +43,7 @@
 	search-ring
 	regexp-search-ring))
 
+
 ;;interface
 (menu-bar-showhide-tool-bar-menu-customize-disable)
 (scroll-bar-mode -1)
@@ -50,6 +51,8 @@
 
 ;; no tabs
 (setq-default indent-tabs-mode nil)
+
+(use-package fish-mode :ensure t)
 
 ;;line numbers
 
@@ -109,8 +112,9 @@
 
 ;;lisp
 (use-package adjust-parens
+  
              :ensure t
-             :config
+             :init
              (local-set-key (kbd "TAB") 'lisp-indent-adjust-parens);for terminal?
              (local-set-key (kbd "<backtab>") 'lisp-dedent-adjust-parens))
 
@@ -151,6 +155,10 @@
   (helm-descbinds-mode))
 ; also explore helm-swoop
 
+;;projectile
+(use-package projectile :ensure t)
+(use-package helm-projectile :ensure t)
+
 ;;pdf and epub tools
 
 ;;the org
@@ -176,6 +184,16 @@
 	     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
 
+
+;;GNU R
+(use-package ess :ensure t)
+(use-package ess-R-data-view :ensure t)
+(use-package ess-R-object-popup
+  :ensure t
+  :config
+ (define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup))
+;;(use-package)
+;;(use-package)
 
 ;;python
 
