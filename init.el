@@ -209,7 +209,7 @@
 (use-package pydoc-info :ensure t) ; :load-path "/path/to/pydoc-info")
 (use-package matlab-mode :ensure t)
 (use-package ein :ensure t)
-(use-package matlab :ensure t)
+
 
 ;;web-mode
 (use-package web-mode
