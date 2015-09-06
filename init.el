@@ -126,7 +126,7 @@
 (use-package helm
   :ensure t
   :diminish helm-mode
-  :config
+  :init
   (require 'helm-config)
   (setq helm-quick-update t
 	helm-M-x-requires-pattern nil
@@ -160,7 +160,10 @@
 
 ;;projectile
 (use-package projectile :ensure t)
-(use-package helm-projectile :ensure t)
+(use-package helm-projectile
+  :ensure t
+  :bind
+  ("C-c p f" . helm-projectile-find-file))
 
 ;;pdf and epub tools
 
