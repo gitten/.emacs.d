@@ -76,6 +76,22 @@
   :config
   (setq default-input-methond "japanese-mozc"
 	mozc-candidate-style 'overlay))
+;;google translate-region
+(use-package google-translate
+  :demand t
+  :ensure t
+  :init
+  (require 'google-translate-smooth-ui)
+  (setq google-translate-translation-directions-alist '(("ja" . "en"))
+        google-translate-show-phonetic t)  
+        
+  :bind
+  ("C-c t" . google-translate-smooth-translate))
+;;sdic
+(use-package sdic
+  :load-path "sdic-2.1.3/")
+
+
 
 (use-package dired+ :ensure t)
 
