@@ -93,7 +93,7 @@
 
 ;;;; abo fun time
 
-(use-package hydra :ensure t)
+(use-package hydra :ensure t :demand t)
 
 (use-package swiper
   :ensure t
@@ -147,6 +147,28 @@
             (add-to-list 'aw-dispatch-alist '(?o hydra-window-scroll/body) t)
             (add-to-list 'aw-dispatch-alist '(?\; hydra-window-frame/body) t))
           (ace-window-display-mode t))
+
+(defhydra hydra-zoom (global-map "<f2>")
+  "zoom"
+  ("g" text-scale-increase "in")
+  ("l" text-scale-decrease "out"))
+
+
+
+(defhydra hydra-window (global-map "M-p")
+  "window"
+  ("h" windmove-left "left")
+  ("j" windmove-down "down")
+  ("k" windmove-up "up")
+  ("l" windmove-right "right")
+  ("a" ace-window "ace")
+  ("u" hydra-universal-argument "universal")
+  ("s" (lambda () (interactive) (ace-window 4)) "swap")
+  ("d" (lambda () (interactive) (ace-window 16)) "delete")
+  ("o" nil "exit"))
+(use-package key-chord :ensure t :config (key-chord-mode 1))
+(key-chord-define-global "yy" 'hydra-window/body)
+
 
 ;;;;
 
