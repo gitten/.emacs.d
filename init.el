@@ -106,7 +106,9 @@
 (use-package counsel
   :ensure t
   :config
-  (use-package smex :ensure t))
+  (use-package smex :ensure t)
+  :bind
+  ("C-t" . counsel-M-x))
 
 (use-package ace-window
           :ensure t
@@ -120,21 +122,30 @@
                 aw-dispatch-always t)
           )
 
-
+(defhydra hydra-aw ()
+  "ace-window"
+  ())
 ;                  (?b balance-windows)
  ;                 (?u winner-undo)
   ;                (?r winner-redo)))
 
 
-(defhydra hydra-zoom (global-map "<f2>")
+(defhydra hydra-zoom (global-map "C-=")
   "zoom"
-  ("g" text-scale-increase "in")
-  ("l" text-scale-decrease "out")
+  ("g" text-scale-increase "grow")
+  ("s" text-scale-decrease "shrink")
   ("o" nil "exit"))
 
 
+(defun hydra-universal-argument (arg)
+  (interactive "P")
+  (setq prefix-arg (if (consp arg)
+                       (list (* 4 (car arg)))
+                     (if (eq arg '-)
+                         (list -4)
+                       '(4)))))
 
-(defhydra hydra-window (global-map "M-p")
+(defhydra hydra-window (global-map "M-p" :columns 4)
   "window"
   ("h" windmove-left "left")
   ("j" windmove-down "down")
@@ -144,12 +155,11 @@
   ("u" hydra-universal-argument "universal")
   ("s" (lambda () (interactive) (ace-window 4)) "swap")
   ("d" (lambda () (interactive) (ace-window 16)) "delete")
-  ("o" nil "exit"))
+  ("o" nil "Exit"))
 
 (key-chord-define-global "yy" 'hydra-window/body)
 
 
-;;;;
 
 (use-package dired+ :ensure t)
 
@@ -195,6 +205,15 @@
   :ensure t
   :init
   (global-pretty-lambda-mode))
+
+;;Haskell
+(use-package haskell-mode :ensure t)
+
+;;erlang
+(use-package erlang
+  :ensure t
+  :config
+  (require 'erlang-start))
 
 ;;helm
 (use-package helm
@@ -252,6 +271,9 @@
             (off . "<span class=\"task-todo\">&#x2610;</span>")
             (trans . "<span class=\"task-in-progress\">[-]</span>"))))
 
+
+(use-package markdown-mode :ensure t)
+(use-package ox-pandoc :ensure t)
 
 (use-package ox-reveal
  	     :ensure t
