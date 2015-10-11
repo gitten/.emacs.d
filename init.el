@@ -206,6 +206,13 @@
   :init
   (global-pretty-lambda-mode))
 
+;;Flymake
+(use-package flymake-easy :ensure t)
+(use-package flymake-sass
+  :ensure f
+  :config
+  (add-hook 'sass-mode-hook 'flymake-sass-load))
+
 ;;Haskell
 (use-package haskell-mode
   :ensure t
@@ -323,7 +330,9 @@
 (use-package ein :ensure t)
 
 
-;;web-mode
+;;web-dev
+(use-package sass-mode :ensure t)
+
 (use-package web-mode
 	     :ensure t
 	     :config
