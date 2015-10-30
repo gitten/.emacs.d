@@ -228,12 +228,16 @@
    '(haskell-process-auto-import-loaded-modules t)
    '(haskell-process-log t)
    '(haskell-process-type 'cabal-repl)))
-
+(add-to-list 'exec-path "/home/gitten/.cabal/bin")
 ;;erlang
 (use-package erlang
   :ensure t
   :config
   (require 'erlang-start))
+
+;;elixir
+(use-package elixir-mode :ensure t)
+(use-package alchemist :ensure t)
 
 ;;helm
 (use-package helm
