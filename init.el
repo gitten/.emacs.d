@@ -163,7 +163,7 @@
 
 (use-package dired+ :ensure t)
 
-(use-package magit :ensure t)
+
 
 ;;auto completion
 (use-package company-c-headers :ensure t)
@@ -369,7 +369,7 @@
 
 
 
-
+(use-package magit :ensure t)
 
 
 
