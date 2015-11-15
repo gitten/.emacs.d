@@ -212,6 +212,10 @@
   :ensure f
   :config
   (add-hook 'sass-mode-hook 'flymake-sass-load))
+(use-package flymake-elixir
+  :ensure t
+  :config
+  (add-hook 'elixir-mode-hook 'flymake-elixir-load))
 
 ;;Haskell
 (use-package haskell-mode
