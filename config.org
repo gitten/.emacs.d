@@ -114,7 +114,9 @@
   :diminish smartparens-mode
   :config
   (require 'smartparens-config)
-  (smartparens-global-mode t))
+  (smartparens-global-mode t)
+  ;heredoc pair
+  (sp-pair "\"\"\"" "\"\""))
 
 (use-package undo-tree
   :ensure t
