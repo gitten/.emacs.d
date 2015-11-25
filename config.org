@@ -233,7 +233,10 @@
             (off . "<span class=\"task-todo\">&#x2610;</span>")
             (trans . "<span class=\"task-in-progress\">[-]</span>"))))
 
-(use-package ox-pandoc :ensure t)
+(use-package ox-pandoc 
+             :ensure t
+             :init
+             (add-to-list 'exec-path "~/.cabal/bin/"))
 
 (use-package ox-reveal
  	     :ensure t
@@ -294,6 +297,12 @@
 
 #+END_SRC
 ** Developer tools
+*** shell tools
+#+BEGIN_SRC emacs-lisp
+(use-package fish-mode :ensure t)
+;;
+
+#+END_SRC
 *** git
 
 #+BEGIN_SRC emacs-lisp
