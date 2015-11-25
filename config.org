@@ -232,7 +232,10 @@
  '((unicode (on . "<span class=\"task-done\">&#x2611;</span>")
             (off . "<span class=\"task-todo\">&#x2610;</span>")
             (trans . "<span class=\"task-in-progress\">[-]</span>"))))
-
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((plantuml .t)
+   (dot . t)))
 (use-package ox-pandoc 
              :ensure t
              :init
