@@ -232,6 +232,8 @@
  '((unicode (on . "<span class=\"task-done\">&#x2611;</span>")
             (off . "<span class=\"task-todo\">&#x2610;</span>")
             (trans . "<span class=\"task-in-progress\">[-]</span>"))))
+
+(setq org-src-tab-acts-natively t)
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((plantuml .t)
