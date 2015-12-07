@@ -253,7 +253,7 @@
   (use-package ox-reveal
     :ensure t
     :config
-    (setq org-reveal-root "file:///~/reveal.js"))
+    (setq org-reveal-root (concat "file:///" (expand-file-name "~/reveal.js" ))))
 
   (use-package org-bullets
     :ensure t
