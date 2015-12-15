@@ -27,7 +27,7 @@
     (("C-h a" . helm-apropos)
      ("C-x C-b" . helm-buffers-list)
      ("M-y" . helm-show-kill-ring)
-     ("M-x" . helm-M-x)
+;;     ("M-x" . helm-M-x)
      ("C-x c o" . helm-occur)
      ("C-x c y" . helm-yas-complete)
      ("C-x c SPC" . helm-all-mark-rings))
@@ -83,7 +83,7 @@
   (setq vc-make-backup-files t)
   (setq auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t)))
 
-                                          ;read further in www.wisdomandwonder.com/worpress/wp-content/uploads/2014/03/C3F.html -via sachachua.com
+  ;;read further in www.wisdomandwonder.com/worpress/wp-content/uploads/2014/03/C3F.html -via sachachua.com
   (setq savehist-file "~/.emacs.d/savehist")
   (savehist-mode 1)
   (setq history-length t)
@@ -196,7 +196,7 @@
     :config
     (use-package smex :ensure t)
     :bind
-    ("C-t" . counsel-M-x))
+    ("M-x" . counsel-M-x))
 
   (use-package ace-window
     :ensure t
@@ -273,6 +273,7 @@
   (use-package company-web :ensure t)
   (use-package company-ghc :ensure t)
   (use-package company-ghci :ensure t)
+;;  (use-package company-racer :ensure t)
 
   (use-package company
     :ensure t
@@ -280,6 +281,8 @@
     :diminish company-mode
     :config
     (global-company-mode )
+    (setq company-idle-delay 0.2)
+    (setq company-minimum-prefix-length 1)
     ;;(add-hook 'after-init-hook 'global-company-mode)
     (add-to-list 'company-backends '(company-c-headers))
     (add-to-list 'company-backends '(company-auctex))
@@ -304,6 +307,7 @@
     :ensure t
     :config
     (add-hook 'elixir-mode-hook 'flymake-elixir-load))
+  (use-package flymake-rust :ensure t)
 
 #+END_SRC
 ** Developer tools
@@ -374,6 +378,10 @@
   (use-package pydoc-info :ensure t) ; :load-path "/path/to/pydoc-info")
   (use-package matlab-mode :ensure t)
   (use-package ein :ensure t)
+
+#+END_SRC
+*** Rust
+#+BEGIN_SRC emacs-lisp
 
 #+END_SRC
 *** GNU R
