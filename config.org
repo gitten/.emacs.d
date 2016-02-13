@@ -27,7 +27,7 @@
     (("C-h a" . helm-apropos)
      ("C-x C-b" . helm-buffers-list)
      ("M-y" . helm-show-kill-ring)
-;;     ("M-x" . helm-M-x)
+     ("C-x C-f" . helm-find-files)
      ("C-x c o" . helm-occur)
      ("C-x c y" . helm-yas-complete)
      ("C-x c SPC" . helm-all-mark-rings))
@@ -47,6 +47,9 @@
   ; also explore helm-swoop
 
 #+END_SRC
+
+#+RESULTS:
+
 ** Emacs Theming
 
 #+BEGIN_SRC emacs-lisp
@@ -60,8 +63,8 @@
     :ensure t
     :demand t
     :init
-    (nyan-mode)
-    (add-hook 'eshell-load-hook 'nyan-prompt-enable))
+    (nyan-mode))
+   
 
   (use-package mode-icons :ensure t :demand t)
   (load "~/.emacs.d/customize-init.el")
@@ -139,7 +142,7 @@
 #+END_SRC
 *** Key chords
 #+BEGIN_SRC emacs-lisp
-(key-chord-define-global "FF" 'find-file)
+(key-chord-define-global "FF" 'helm-find-files)
 #+END_SRC
 ** Japanese language support
    
@@ -415,8 +418,7 @@
   (use-package jedi
     :ensure t
     :config
-    (add-hook 'python-mode-hook 'jedi:setup)
-    (setq jedi:complete-on-dot))
+    (add-hook 'python-mode-hook 'jedi:setup))
   (use-package pydoc-info :ensure t) ; :load-path "/path/to/pydoc-info")
   (use-package matlab-mode :ensure t)
   (use-package ein :ensure t)
