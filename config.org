@@ -266,11 +266,17 @@
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((plantuml .t)
-     (dot . t)))
-    (use-package ox-pandoc 
-      :ensure t
-      :init
-      (add-to-list 'exec-path "~/.cabal/bin/"))
+     (dot . t)
+     (haskell . t)
+     (elixir . t)
+     (lfe . t)))
+
+  (use-package ob-elixir :ensure t)
+  (use-package ob-lfe :ensure t)
+  (use-package ox-pandoc 
+    :ensure t
+    :init
+    (add-to-list 'exec-path "~/.cabal/bin/"))
 
   (use-package ox-reveal
     :ensure t
@@ -396,7 +402,10 @@
      '(haskell-process-type 'cabal-repl)))
   (add-to-list 'exec-path "/home/gitten/.cabal/bin")
 #+END_SRC
-
+*** PureScript
+#+BEGIN_SRC emacs-lisp
+(use-package purescript-mode :ensure t)
+#+END_SRC
 *** Elixir and Erlang
 
 #+BEGIN_SRC emacs-lisp
@@ -409,6 +418,14 @@
   (use-package elixir-mode :ensure t)
   (use-package alchemist :ensure t)
 
+#+END_SRC
+*** LFE (Lisp Flavored Erlang)
+#+BEGIN_SRC emacs-lisp
+  (use-package lfe-mode :ensure t)
+#+END_SRC
+*** Clojure
+#+BEGIN_SRC emacs-lisp
+  (use-package cider :ensure t)
 #+END_SRC
 *** elm
 #+BEGIN_SRC emacs-lisp
@@ -471,10 +488,10 @@
       (setq web-mode-enable-current-element-highlight t)
       (setq web-mode-enable-current-column-highlight t))
       ;;(setq web-mode-enable-auto-pairing t)
-               
+ 
     (add-hook 'web-mode-hook 'my-web-mode-hook))
 
-
+  (setq js-indent-level 2)
 #+END_SRC
 ** Document tools
 

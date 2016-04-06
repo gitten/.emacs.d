@@ -17,7 +17,7 @@
  '(haskell-process-type (quote cabal-repl))
  '(package-selected-packages
    (quote
-    (neotree elm-mode smex markdown-mode web-mode sass-mode ess-R-object-popup ess-R-data-view ess ein matlab-mode pydoc-info jedi alchemist elixir-mode erlang helm-projectile projectile magit fish-mode flycheck-elm flycheck flymake-rust flymake-sass flymake-easy company-ghci company-ghc company-web company-jedi company-auctex company-c-headers worf org-bullets ox-reveal ox-pandoc ace-window counsel swiper avy google-translate beacon dired+ undo-tree smartparens key-chord pretty-lambdada nyan-mode base16-theme mode-icons helm-descbinds helm paradox use-package)))
+    (ack dired-subtree neotree elm-mode smex markdown-mode web-mode sass-mode ess-R-object-popup ess-R-data-view ess ein matlab-mode pydoc-info jedi alchemist elixir-mode erlang helm-projectile projectile magit fish-mode flycheck-elm flycheck flymake-rust flymake-sass flymake-easy company-ghci company-ghc company-web company-jedi company-auctex company-c-headers worf org-bullets ox-reveal ox-pandoc ace-window counsel swiper avy google-translate beacon dired+ undo-tree smartparens key-chord pretty-lambdada nyan-mode base16-theme mode-icons helm-descbinds helm paradox use-package)))
  '(paradox-github-token t)
  '(tool-bar-mode nil))
 (custom-set-faces
