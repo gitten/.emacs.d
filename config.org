@@ -38,43 +38,20 @@
     (setq helm-split-window-in-side-p t ; open helm buffer inside current window
           helm-move-to-line-cycle-in-source t ; cycle back when reaching top or bottom of source
           helm-ff-search-library-in-sexp t
-          helm-ff-file-name-history-use-recentf t))
+          helm-ff-file-name-history-use-recentf t)
+    (use-package helm-descbinds
+      :ensure t
+      :init
+      (helm-descbinds-mode)))
 
-  (use-package helm-descbinds
+  (use-package helm-gtags
     :ensure t
-    :init
-    (helm-descbinds-mode))
+    :config
+    (require 'setup-helm-gtags))
   ; also explore helm-swoop
 
 #+END_SRC
 
-#+RESULTS:
-
-** Emacs Theming
-
-#+BEGIN_SRC emacs-lisp
-  (use-package mode-icons
-    :ensure t
-    :demand t
-    :init
-    (mode-icons-mode))
-  (use-package base16-theme :ensure t)
-  (use-package nyan-mode
-    :ensure t
-    :demand t
-    :init
-    (nyan-mode))
-   
-
-  (use-package mode-icons :ensure t :demand t)
-  (load "~/.emacs.d/customize-init.el")
-
-  (use-package pretty-lambdada
-    :ensure t
-    :init
-    (global-pretty-lambda-mode))
-
-#+END_SRC
 ** General enviornment configs
    
 #+BEGIN_SRC emacs-lisp
@@ -116,7 +93,8 @@
       :diminish smartparens-mode
       :config
       (require 'smartparens-config)
-      (smartparens-global-mode t)
+ 
+      ;(smartparens-global-mode t)
       ;;heredoc pair
       (sp-pair "\"\"\"" "\"\""))
 
@@ -142,7 +120,7 @@
 #+END_SRC
 *** Key chords
 #+BEGIN_SRC emacs-lisp
-(key-chord-define-global "FF" 'helm-find-files)
+(key-chord-define-global "FF" 'counsel-find-file)
 #+END_SRC
 ** Japanese language support
    
@@ -288,6 +266,8 @@
     :init
     (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
+  (use-package timesheet :ensure t)
+
   (use-package worf
     :ensure t
     :config
@@ -299,9 +279,9 @@
 #+BEGIN_SRC emacs-lisp
   (use-package company-c-headers :ensure t)
 
-  (use-package company-auctex
-    :ensure t
-    :init(company-auctex-init))
+  ;; (use-package company-auctex
+  ;;   :ensure t
+  ;;   :init(company-auctex-init))
 
   (use-package company-jedi :ensure t)
   (use-package company-web :ensure t)
@@ -314,20 +294,21 @@
     :ensure t
     :demand t
     :diminish company-mode
-    :config
+    :init
     (global-company-mode )
     (setq company-idle-delay 0.2)
     (setq company-minimum-prefix-length 1)
     ;;(add-hook 'after-init-hook 'global-company-mode)
     (add-to-list 'company-backends '(company-c-headers))
     (add-to-list 'company-backends '(company-auctex))
-               (add-to-list 'company-backends '(company-jedi))
-               (add-to-list 'company-backends '(company-web-html))
-               (add-to-list 'company-backends '(company-web-jade))
-               (add-to-list 'company-backends '(company-web-slim))
-               (add-to-list 'company-backends '(company-ghc))
-               (add-to-list 'company-backends '(company-ghci))
-               (add-to-list 'company-backends '(company-elm)))
+    (add-to-list 'company-backends '(company-jedi))
+    (add-to-list 'company-backends '(company-web-html))
+    (add-to-list 'company-backends '(company-web-jade))
+    (add-to-list 'company-backends '(company-web-slim))
+    (add-to-list 'company-backends '(company-ghc))
+    (add-to-list 'company-backends '(company-ghci))
+    (add-to-list 'company-backends '(company-elm))
+    (add-to-list 'company-backends '(company-alchemist)))
 
 
 #+END_SRC
@@ -356,6 +337,22 @@
     :config
     (add-hook 'flyckeck-mode-hook #'flycheck-elm-setup))
 
+#+END_SRC
+
+*** lispy stuff
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters 
+    :ensure t
+    :config
+    (setq rainbow-delimiters-max-face-count 1)
+    (set-face-attribute 'rainbow-delimiters-depth-1-face nil 
+                        :foreground "dark grey")
+    (set-face-attribute 'rainbow-delimiters-unmatched-face nil 
+                        :foreground "red"
+                        :inherit 'error))
+
+  (use-package lispy :ensure t)
+  (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
 #+END_SRC
 ** Developer tools
 *** shell tools
@@ -425,7 +422,11 @@
 #+END_SRC
 *** Clojure
 #+BEGIN_SRC emacs-lisp
-  (use-package cider :ensure t)
+  (use-package cider 
+    :ensure t
+    :config
+    (add-hook 'cider-mode-hook 'rainbow-delimiters-mode))
+;;    (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
 #+END_SRC
 *** elm
 #+BEGIN_SRC emacs-lisp
@@ -443,6 +444,23 @@
   (use-package matlab-mode :ensure t)
   (use-package ein :ensure t)
 
+#+END_SRC
+*** C/Cpp lang
+#+BEGIN_SRC emacs-lisp
+  (use-package ggtags
+    :ensure t
+    :config
+    (add-hook 'cmode-common-hook
+              (lambda ()
+                (when (derived-mode-p 'c-mode 'c++-mode 'java-mide 'asm-mode)
+                  (ggtags-mode 1))))
+    (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
+    (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
+    (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
+    (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
+    (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
+    (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
+    (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
 #+END_SRC
 *** Rust
 #+BEGIN_SRC emacs-lisp
@@ -497,5 +515,30 @@
 
 #+BEGIN_SRC emacs-lisp
   (use-package markdown-mode :ensure t)
+
+#+END_SRC
+
+** Emacs Theming
+
+#+BEGIN_SRC emacs-lisp
+  (use-package mode-icons
+    :ensure t
+    :disabled t
+    :demand t
+    :init
+    (mode-icons-mode))
+  (use-package base16-theme :ensure t)
+  (use-package nyan-mode
+    :ensure t
+    :demand t
+    :init
+    (nyan-mode))
+   
+  (load "~/.emacs.d/customize-init.el")
+
+  (use-package pretty-lambdada
+    :ensure t
+    :init
+    (global-pretty-lambda-mode))
 
 #+END_SRC
