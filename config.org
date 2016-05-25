@@ -44,10 +44,7 @@
       :init
       (helm-descbinds-mode)))
 
-  (use-package helm-gtags
-    :ensure t
-    :config
-    (require 'setup-helm-gtags))
+  (use-package helm-gtags :ensure t)
   ; also explore helm-swoop
 
 #+END_SRC
@@ -337,6 +334,23 @@
     :config
     (add-hook 'flyckeck-mode-hook #'flycheck-elm-setup))
 
+(defun parse-jslinter-warning (warning)
+  (flycheck-error-new
+   :line (1+ (cdr (assoc 'line warning)))
+   :column (1+ (cdr (assoc 'column warning)))
+   :message (cdr (assoc 'message warning))
+   :level 'error))
+(defun jslinter-error-parser (output checker buffer)
+  (mapcar 'parse-jslinter-warning
+          (cdr (assoc 'warnings (aref (json-read-from-string output) 0)))))
+(flycheck-define-checker javascript-jslinter
+  "A JavaScript syntax and style checker based on JSLinter.
+
+See URL `https://github.com/tensor5/JSLinter'."
+  :command ("/user/local/lib/node_modules/jslinter/jslint" "--raw" source)
+  :error-parser jslinter-error-parser
+  :modes (js-mode js2-mode js3-mode))
+
 #+END_SRC
 
 *** lispy stuff
@@ -453,7 +467,7 @@
     (add-hook 'cmode-common-hook
               (lambda ()
                 (when (derived-mode-p 'c-mode 'c++-mode 'java-mide 'asm-mode)
-                  (ggtags-mode 1))))
+                  (ggtags-mode 1)))))
     (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
     (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
     (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
@@ -496,7 +510,8 @@
     (setq web-mode-engines-alist '(("django" . "\\.html\\'")))
     (defun my-web-mode-hook ()
       "Hooks for Web mode."
-      (setq web-mode-markup-indent 2)
+      (setq web-mode-markup-indent-offset 2)
+      (setq web-mod-code-indent-offset 2)
       (setq web-mode-css-indent-offset 2)
       (setq web-mode-code-indent-offset 2)
       (setq web-mode-enable-css-colorization t)
