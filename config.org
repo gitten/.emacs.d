@@ -216,61 +216,65 @@
 
 #+END_SRC
 ** The Org
+   #+BEGIN_SRC emacs-lisp
+     (global-set-key "\C-cl" 'org-store-link)
+     (global-set-key "\C-cc" 'org-capture)
+     (global-set-key "\C-ca" 'org-agenda)
+     (global-set-key "\C-cb" 'org-iswitchb)
+     (setq org-startup-folded 'content)
+     (setq org-html-checkbox-type 'unicode)
+     (setq org-html-checkbox-types
+           '((unicode (on . "<span class=\"task-done\">&#x2611;</span>")
+                      (off . "<span class=\"task-todo\">&#x2610;</span>")
+                      (trans . "<span class=\"task-in-progress\">[-]</span>"))))
 
-#+BEGIN_SRC emacs-lisp
-  (global-set-key "\C-cl" 'org-store-link)
-  (global-set-key "\C-cc" 'org-capture)
-  (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-cb" 'org-iswitchb)
-  (setq org-startup-folded 'content)
-  (setq org-html-checkbox-type 'unicode)
-  (setq org-html-checkbox-types
-        '((unicode (on . "<span class=\"task-done\">&#x2611;</span>")
-                   (off . "<span class=\"task-todo\">&#x2610;</span>")
-                   (trans . "<span class=\"task-in-progress\">[-]</span>"))))
+     (add-hook 'org-babel-after-execute-hook 'bh/display-inline-images 'append)
+     (defun bh/display-inline-images ()
+       (condition-case nil
+           (org-display-inline-images)
+         (error nil)))
 
-  (add-hook 'org-babel-after-execute-hook 'bh/display-inline-images 'append)
-  (defun bh/display-inline-images ()
-    (condition-case nil
-        (org-display-inline-images)
-      (error nil)))
+     (setq org-src-tab-acts-natively t)
+     (setq org-confirm-babel-evaluate nil)
+     (setq org-plantuml-jar-path "~/.emacs.d/plantuml.jar")
 
-  (setq org-src-tab-acts-natively t)
-  (setq org-confirm-babel-evaluate nil)
-  (setq org-plantuml-jar-path "~/.emacs.d/plantuml.jar")
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((plantuml .t)
-     (dot . t)
-     (haskell . t)
-     (elixir . t)
-     (lfe . t)))
 
-  (use-package ob-elixir :ensure t)
-  (use-package ob-lfe :ensure t)
-  (use-package ox-pandoc 
-    :ensure t
-    :init
-    (add-to-list 'exec-path "~/.local/bin/"))
 
-  (use-package ox-reveal
-    :ensure t
-    :config
-    (setq org-reveal-root (concat "file:///" (expand-file-name "~/reveal.js" ))))
+     (use-package ox-reveal
+       :ensure t
+       :config
+       (setq org-reveal-root (concat "file:///" (expand-file-name "~/reveal.js" ))))
 
-  (use-package org-bullets
-    :ensure t
-    :init
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+     (use-package org-bullets
+       :ensure t
+       :init
+       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-  (use-package timesheet :ensure t)
+     (use-package timesheet :ensure t)
 
-  (use-package worf
-    :ensure t
-    :config
-    (worf-mode 1))
+     (use-package worf
+       :ensure t
+       :config
+       (worf-mode 1))
+  #+END_SRC
 
-#+END_SRC
+*** org babel
+    #+BEGIN_SRC emacs-lisp
+      (use-package ob-elixir :ensure t)
+      (use-package ob-lfe :ensure t)
+      (use-package ox-pandoc 
+        :ensure t
+        :init
+        (add-to-list 'exec-path "~/.local/bin/"))
+
+      (org-babel-do-load-languages
+       'org-babel-load-languages
+       '((plantuml .t)
+         (dot . t)
+         (haskell . t)
+         (elixir . t)
+         (lfe . t)))
+   #+END_SRC
 ** Auto complete with Company mode
 
 #+BEGIN_SRC emacs-lisp
