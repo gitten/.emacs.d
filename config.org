@@ -1,4 +1,5 @@
 
+
 * My Emacs Config
 
 ** Paradox package manager
@@ -124,9 +125,10 @@
 #+BEGIN_SRC emacs-lisp
   ;;japanese input
   (use-package mozc
+    :ensure t
     :config
-    (setq default-input-methond "japanese-mozc"
-          mozc-candidate-style 'overlay))
+    (setq default-input-methond "japanese-mozc"))
+
   ;;google translate-region
   (use-package google-translate
     :demand t
@@ -299,7 +301,11 @@
     (global-company-mode )
     (setq company-idle-delay 0.2)
     (setq company-minimum-prefix-length 1)
-    ;;(add-hook 'after-init-hook 'global-company-mode)
+
+    (add-hook 'after-init-hook 'global-company-mode)
+    (add-hook 'dired-mode-hook 'dired-no-company)
+    (defun dired-no-company () (company-mode 0))
+
     (add-to-list 'company-backends '(company-c-headers))
     (add-to-list 'company-backends '(company-auctex))
     (add-to-list 'company-backends '(company-jedi))
@@ -398,6 +404,10 @@ See URL `https://github.com/tensor5/JSLinter'."
     ("C-c p f" . helm-projectile-find-file))
 
 #+END_SRC
+*** Idris
+    #+BEGIN_SRC emacs-lisp
+      (use-package idris-mode :ensure t)
+    #+END_SRC
 *** Haskell
 
 #+BEGIN_SRC emacs-lisp
