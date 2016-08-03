@@ -2,6 +2,10 @@
 
 * My Emacs Config
 
+** lisp librairies
+   #+BEGIN_SRC emacs-lisp
+     (load "~/.emacs.d/lisp/PG/generic/proof-site")
+   #+END_SRC
 ** Paradox package manager
 #+BEGIN_SRC emacs-lisp
   (use-package paradox
@@ -290,6 +294,7 @@
   (use-package company-web :ensure t)
   (use-package company-ghc :ensure t)
   (use-package company-ghci :ensure t)
+  (use-package company-coq :ensure t)
 
   ;;(use-package company-racer :ensure t)
 
@@ -315,7 +320,8 @@
     (add-to-list 'company-backends '(company-ghc))
     (add-to-list 'company-backends '(company-ghci))
     (add-to-list 'company-backends '(company-elm))
-    (add-to-list 'company-backends '(company-alchemist)))
+    (add-to-list 'company-backends '(company-alchemist))
+    (add-to-list 'company-backends '(company-coq)))
 
 
 #+END_SRC
