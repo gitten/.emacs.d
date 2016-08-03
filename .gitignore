@@ -3,3 +3,11 @@
 
 # Packaging
 .cask
+/abbrev_defs
+/auto-save-list/
+/backups/
+/config.el/
+/elpa/
+/savehist
+/smex-items
+srecode-map.el
