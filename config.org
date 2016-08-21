@@ -289,7 +289,8 @@
 
 *** org my life
     #+BEGIN_SRC emacs-lisp
-      (add-to-list 'load-path (expand-file-name "~/the-org-life"))
+      (setq org-directory "~/the-org-life")
+      ;;(add-to-list 'load-path (expand-file-name "~/the-org-life"))
       (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
       (setq org-agenda-files '("~/the-org-life"))
     #+END_SRC
@@ -311,6 +312,12 @@
          (elixir . t)
          (lfe . t)))
    #+END_SRC
+
+*** mobile org
+    #+BEGIN_SRC emacs-lisp
+      (setq org-mobile-directory "~/Dropbox/mobileorg")
+      (setq org-mobile-inbox-for-pull "~/the-org-life")
+    #+END_SRC
 ** Auto complete with Company mode
 
 #+BEGIN_SRC emacs-lisp
