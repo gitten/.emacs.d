@@ -126,7 +126,7 @@
 
   (use-package highlight-parentheses
   :ensure t
-  :init t
+  :init
    (define-globalized-minor-mode global-highlight-parentheses-mode
      highlight-parentheses-mode
      (lambda ()
