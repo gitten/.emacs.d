@@ -537,6 +537,7 @@
     (use-package racer
       :ensure t
       :config
+      (setq racer-rust-src-path "rust-src/src/")
       (eldoc-mode 1)
       (company-mode 1))
 
