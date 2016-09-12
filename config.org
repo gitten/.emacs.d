@@ -526,8 +526,28 @@
 
 ** Rust
 #+BEGIN_SRC emacs-lisp
+  (use-package rust-mode
+    :ensure t
+    :init
+    (use-package cargo 
+      :ensure t
+      :init
+      (add-to-list 'exec-path "~/.cargo/bin/"))
+    (use-package rustfmt :ensure t)
+    (use-package racer
+      :ensure t
+      :config
+      (eldoc-mode 1)
+      (company-mode 1))
 
- #+END_SRC
+    :config
+    (racer-mode 1)
+    (cargo-minor-mode 1)
+    (racer-mode 1)
+
+    :bind
+    ("C-c <tab>" . rust-format-buffer))
+#+END_SRC
 
 ** GNU R
 #+BEGIN_SRC emacs-lisp
