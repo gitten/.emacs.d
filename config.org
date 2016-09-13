@@ -537,14 +537,13 @@
     (use-package racer
       :ensure t
       :config
-      (setq racer-rust-src-path "rust-src/src/")
-      (eldoc-mode 1)
-      (company-mode 1))
+      (setq racer-rust-src-path "~/rust-src/src/")
+      (add-hook 'racer-mode-hook #'eldoc-mode)
+      (add-hook 'racer-mode-hook #'company-mode))
 
     :config
-    (racer-mode 1)
-    (cargo-minor-mode 1)
-    (racer-mode 1)
+    (add-hook 'rust-mode-hook #'racer-mode)
+    (add-hook 'rust-mode-hook #'cargo-minor-mode)
 
     :bind
     ("C-c <tab>" . rust-format-buffer))
