@@ -185,6 +185,7 @@
     :ensure t
     :bind
     ("C-x o" . ace-window)
+    ("M-o" . ace-window)
     :config
     (winner-mode t)
     (set-face-attribute 'aw-leading-char-face t
