@@ -163,7 +163,8 @@
     (setq ivy-extra-directories '("./"))
     (use-package ivy-hydra :ensure t)
     :bind
-    ("C-c C-r" . ivy-resume))
+    ("C-c C-r" . ivy-resume)
+    ("C-l" . backward-kill-word))
 
   (use-package swiper
     :ensure t
@@ -277,10 +278,10 @@
 
 ** org my life
  #+BEGIN_SRC emacs-lisp
-   (setq org-directory "~/the-org-life")
+   (setq org-directory "~/Dropbox/the-org-life")
    ;;(add-to-list 'load-path (expand-file-name "~/the-org-life"))
    (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
-   (setq org-agenda-files '("~/the-org-life"))
+   (setq org-agenda-files '("~/Dropbox/the-org-life"))
 #+END_SRC
 
 ** org babel
@@ -327,10 +328,18 @@
     :ensure t
     :demand t
     :diminish company-mode
-    :init
-    (global-company-mode )
-    (setq company-idle-delay 0.2)
-    (setq company-minimum-prefix-length 1)
+    :config
+    (global-company-mode)
+    (setq global-company-modes '(not-term-mode))
+    (setq company-transformers '(company-sort-by-occurence))
+    (setq company-idle-delay 0.2
+          company-minimum-prefix-length 2
+          company-selection-wrap-around t
+          company-show-numbers t
+          company-require-match nil
+          company-dabbrev-downcase nil
+          company-dabbrev-ignore-case nil)
+
 
     (add-hook 'after-init-hook 'global-company-mode)
     (add-hook 'dired-mode-hook 'dired-no-company)
@@ -479,6 +488,11 @@
   (use-package lfe-mode :ensure t)
 #+END_SRC
 
+** Racket
+#+BEGIN_SRC emacs-lisp
+  (use-package geiser :ensure t)
+  (use-package quack :ensure t)
+#+END_SRC
 ** Clojure
 #+BEGIN_SRC emacs-lisp
   (use-package cider 
@@ -509,6 +523,10 @@
 
 ** C/Cpp lang
 #+BEGIN_SRC emacs-lisp
+  ;; (defun my-c-init-hook () 
+  ;;   (define-key c-mode-base-map (kbd "M-p")) 'gud-print)
+  ;; (add-hook 'c-initialization-hook 'my-c-init-hook)
+
   (use-package ggtags
     :ensure t
     :config
@@ -523,6 +541,18 @@
   (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
   (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
   (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
+#+END_SRC
+
+*** Hydras
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-gdb ()
+    "gud-gdb Commands"
+    ("r" gud-run "gud run")
+    ("n" gud-next "gud next")
+    ("s" gud-step "gud step")
+    ("b" gud-break "gud break point")
+    ("c" gud-cont "gud continue")
+    ("w" gdb-many-windows "gdb all windows"))
 #+END_SRC
 
 ** Rust
