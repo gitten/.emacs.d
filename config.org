@@ -3,6 +3,7 @@
 * lisp librairies
 #+BEGIN_SRC emacs-lisp
   ;;(load "~/.emacs.d/lisp/PG/generic/proof-site")
+  (load "~/.emacs.d/secrets.el")
 #+END_SRC
 
 * Paradox package manager
@@ -225,7 +226,6 @@
     :bind
     )
 #+END_SRC
-
 * The Org
 #+BEGIN_SRC emacs-lisp
   (global-set-key "\C-cl" 'org-store-link)
@@ -284,6 +284,23 @@
    (setq org-agenda-files '("~/Dropbox/the-org-life"))
 #+END_SRC
 
+** calendar
+#+BEGIN_SRC emacs-lisp
+  (use-package calfw
+    :ensure t
+    :config
+    (require 'calfw-org))
+
+  (use-package org-gcal
+    :ensure t
+    :config
+    (setq org-gcal-client-id my-gcal-client-id
+          org-gcal-client-secret my-gcal-secret
+          org-gcal-file-alist 
+          '(("ferren56@gmail.com" . "~/Dropbox/the-org-life/gcal.org"))))
+
+  (use-package calfw-gcal :ensure t)
+#+END_SRC   
 ** org babel
 #+BEGIN_SRC emacs-lisp
   (use-package ob-elixir :ensure t)
@@ -320,7 +337,7 @@
   (use-package company-web :ensure t)
   (use-package company-ghc :ensure t)
   (use-package company-ghci :ensure t)
-  (use-package company-coq :ensure t)
+;;  (use-package company-coq :ensure t)
 
   ;;(use-package company-racer :ensure t)
 
@@ -490,9 +507,10 @@
 
 ** Racket
 #+BEGIN_SRC emacs-lisp
-  (use-package geiser :ensure t)
-  (use-package quack :ensure t)
-#+END_SRC
+;;  (use-package geiser :ensure t)
+;;  (use-package quack :ensure t)
+  (use-package racket-mode :ensure t)
+q#+END_SRC
 ** Clojure
 #+BEGIN_SRC emacs-lisp
   (use-package cider 
