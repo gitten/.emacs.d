@@ -110,6 +110,14 @@
     (global-highlight-parentheses-mode t))
 #+END_SRC
 
+** Welcome screen
+   start with agenda/todo view
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'after-init-hook 
+            '(lambda () 
+               (org-agenda nil "n")
+               (delete-other-windows)))
+#+END_SRC
 * Japanese language support
 #+BEGIN_SRC emacs-lisp
   (use-package mozc
@@ -165,13 +173,14 @@
     (use-package ivy-hydra :ensure t)
     :bind
     ("C-c C-r" . ivy-resume)
-    ("C-l" . backward-kill-word))
+    :config
+    (define-key ivy-minibuffer-map (kbd "C-l") 'backward-kill-word))
 
   (use-package swiper
     :ensure t
     :demand t
     :bind
-    ("C-s" . swiper))
+    ("C-s" . swiper-all))
 
   (use-package counsel
     :ensure t
@@ -249,8 +258,8 @@
   (add-hook
    'org-mode-hook
    (lambda ()
-     (visual-line-mode 1)
-     (set-visual-wrap-column 80)))
+     (turn-on-auto-fill)gettings things done emacs
+     (visual-line-mode)))
 
   (setq org-src-tab-acts-natively t)
   (setq org-confirm-babel-evaluate nil)
@@ -261,7 +270,8 @@
   (use-package ox-reveal
     :ensure t
     :config
-    (setq org-reveal-root (concat "file:///" (expand-file-name "~/reveal.js" ))))
+    (setq org-reveal-root 
+          (concat "file:///" (expand-file-name "~/sources-apps/reveal.js/" ))))
 
   (use-package org-bullets
     :ensure t
@@ -278,10 +288,16 @@
 
 ** org my life
  #+BEGIN_SRC emacs-lisp
-   (setq org-directory "~/Dropbox/the-org-life")
+   (setq org-directory "~/the-org-life")
    ;;(add-to-list 'load-path (expand-file-name "~/the-org-life"))
    (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
-   (setq org-agenda-files '("~/Dropbox/the-org-life"))
+   (setq org-agenda-files 
+                  '("~/the-org-life"
+                    "~/the-org-life/sy"
+                    "~/the-org-life/sy/flora-prj"                   
+                    ))
+
+  (setq org-clock-persist 'history)
 #+END_SRC
 
 ** calendar
@@ -324,7 +340,6 @@
   (setq org-mobile-directory "~/Dropbox/mobileorg")
   (setq org-mobile-inbox-for-pull "~/the-org-life")
 #+END_SRC
-
 * Auto complete with Company mode
 #+BEGIN_SRC emacs-lisp
   (use-package company-c-headers :ensure t)
@@ -348,7 +363,7 @@
     :config
     (global-company-mode)
     (setq global-company-modes '(not-term-mode))
-    (setq company-transformers '(company-sort-by-occurence))
+;;    (setq company-transformers '(company-sort-by-occurence))
     (setq company-idle-delay 0.2
           company-minimum-prefix-length 2
           company-selection-wrap-around t
@@ -361,7 +376,7 @@
     (add-hook 'after-init-hook 'global-company-mode)
     (add-hook 'dired-mode-hook 'dired-no-company)
     (defun dired-no-company () (company-mode 0))
-    (add-to-list 'company-backends 'company-irony)
+
     (add-to-list 'company-backends 'company-c-headers)
 
     (add-to-list 'company-backends '(company-c-headers))
@@ -431,11 +446,16 @@
   (use-package lispy :ensure t)
   (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
 #+END_SRC
-
+* Document tools
+** latex
+   #+BEGIN_SRC emacs-lisp
+   (require 'preview)
+   #+END_SRC
 * Dev tools
 ** shell tools
 #+BEGIN_SRC emacs-lisp
   (use-package fish-mode :ensure t)
+  (use-package ag :ensure t)
 #+END_SRC
 
 ** git
@@ -486,6 +506,22 @@
 ** PureScript
 #+BEGIN_SRC emacs-lisp
   (use-package purescript-mode :ensure t)
+  (use-package repl-toggle :ensure t)
+  (use-package psci
+    :ensure t
+    :config
+    (add-to-list 'rtog/mode-repl-alist '(purescript-mode . psci))
+    (add-hook 'purescript-mode-hook 'inferior-psci-mode))
+
+  (use-package psc-ide
+    :ensure t
+    :config
+    (add-hook 'purescript-mode-hook
+              (lambda ()
+                (psc-ide-mode)
+                (company-mode)
+                (flycheck-mode)
+                (turn-on-purescript-indentation))))
 #+END_SRC
 
 ** Elixir and Erlang
@@ -510,7 +546,8 @@
 ;;  (use-package geiser :ensure t)
 ;;  (use-package quack :ensure t)
   (use-package racket-mode :ensure t)
-q#+END_SRC
+#+END_SRC
+
 ** Clojure
 #+BEGIN_SRC emacs-lisp
   (use-package cider 
@@ -520,6 +557,9 @@ q#+END_SRC
     (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode)
     (add-hook 'clojure-mode-hook #'lispy-mode))
   ;;    (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
+
+  ;; for boot projects
+  ;(add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
 #+END_SRC
 
 ** elm
@@ -541,9 +581,9 @@ q#+END_SRC
 
 ** C/Cpp lang
 #+BEGIN_SRC emacs-lisp
-  ;; (defun my-c-init-hook () 
-  ;;   (define-key c-mode-base-map (kbd "M-p")) 'gud-print)
-  ;; (add-hook 'c-initialization-hook 'my-c-init-hook)
+  (use-package ctags :ensure t)
+  ;; look at ctags-update too
+
 
   (use-package ggtags
     :ensure t
@@ -561,6 +601,17 @@ q#+END_SRC
   (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
 #+END_SRC
 
+*** libclang assisted completion
+#+BEGIN_SRC emacs-lisp
+  (use-package irony
+    :ensure t
+    :init
+    (use-package company-irony :ensure t)
+    (add-to-list 'company-backends 'company-irony)
+    :config
+    (add-hook 'c++-mode-hook 'irony-mode)
+    (add-hook 'c-mode-hook 'irony-mode))
+#+END_SRC    
 *** Hydras
 #+BEGIN_SRC emacs-lisp
   (defhydra hydra-gdb ()
@@ -646,12 +697,17 @@ q#+END_SRC
 
 ** arduino
 #+BEGIN_SRC emacs-lisp
-  (use-package arduino-mode
-    :ensure t
-    :config
-    (add-to-list 'load-path "~/.emacs.d/vendor/arduino-mode")
-    (setq auto-mode-alist (cons '("\\.\\(pde\\|ino\\)$" . arduino-mode) auto-mode-alist))
-    (autoload 'arduino-mode "arduino-mode" "Arduino editing mode." t))
+  ;; (use-package arduino-mode
+  ;;   :ensure t
+  ;;   :config
+  ;;   (add-to-list 'load-path "~/.emacs.d/vendor/arduino-mode")
+  ;;   (setq auto-mode-alist (cons '("\\.\\(pde\\|ino\\)$" . arduino-mode) auto-mode-alist))
+  ;;   (autoload 'arduino-mode "arduino-mode" "Arduino editing mode." t))
+#+END_SRC
+
+*** Platformio
+#+BEGIN_SRC emacs-lisp
+(use-package platformio-mode :ensure t)
 #+END_SRC
 
 * Document tools
