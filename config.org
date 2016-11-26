@@ -3,7 +3,8 @@
 * lisp librairies
 #+BEGIN_SRC emacs-lisp
   ;;(load "~/.emacs.d/lisp/PG/generic/proof-site")
-  (load "~/.emacs.d/secrets.el")
+  (when (file-exists-p "~/.emacs.d/secrets.el")
+    (load "~/.emacs.d/secrets.el"))
 #+END_SRC
 
 * Paradox package manager
@@ -289,16 +290,17 @@
 
 ** org my life
  #+BEGIN_SRC emacs-lisp
-   (setq org-directory "~/the-org-life")
-   ;;(add-to-list 'load-path (expand-file-name "~/the-org-life"))
-   (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
-   (setq org-agenda-files 
-                  '("~/the-org-life"
-                    "~/the-org-life/sy"
-                    "~/the-org-life/sy/flora-prj"                   
-                    ))
+   (when (file-exists-p "~/the-org-life")
+     (setq org-directory "~/the-org-life")
+     ;;(add-to-list 'load-path (expand-file-name "~/the-org-life"))
+     (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
+     (setq org-agenda-files 
+                   '("~/the-org-life"
+                     "~/the-org-life/sy"
+                     "~/the-org-life/sy/flora-prj"                   
+                     )))
 
-  (setq org-clock-persist 'history)
+   (setq org-clock-persist 'history)
 #+END_SRC
 
 ** calendar
