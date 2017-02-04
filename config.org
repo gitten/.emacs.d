@@ -189,10 +189,11 @@
     :demand t
     :config
     (use-package smex :ensure t)
+    (use-package counsel-projectile :ensure t)
     :bind
 
     ("M-x" . counsel-M-x)
-    ("C-c k" . counsel-ag))
+    ("C-c k" . counsel-projectile-ag))
 
   (use-package ace-window
     :ensure t
@@ -351,7 +352,7 @@
     ;;   :ensure t
     ;;   :init(company-auctex-init))
 
-    (use-package company-jedi :ensure t)
+
     (use-package company-web :ensure t)
     (use-package company-ghc :ensure t)
     (use-package company-ghci :ensure t)
@@ -364,7 +365,6 @@
       :demand t
       :diminish company-mode
       :config
-      (global-company-mode)
       (setq global-company-modes '(not-term-mode))
   ;;    (setq company-transformers '(company-sort-by-occurence))
       (setq company-idle-delay 0.2
@@ -375,8 +375,6 @@
             company-dabbrev-downcase nil
             company-dabbrev-ignore-case nil)
 
-
-      (add-hook 'after-init-hook 'global-company-mode)
       (add-hook 'dired-mode-hook 'dired-no-company)
       (defun dired-no-company () (company-mode 0))
 
@@ -384,14 +382,14 @@
 
       (add-to-list 'company-backends '(company-c-headers))
       (add-to-list 'company-backends '(company-auctex))
-      (add-to-list 'company-backends '(company-jedi))
+     
       (add-to-list 'company-backends '(company-web-html))
       (add-to-list 'company-backends '(company-web-jade))
       (add-to-list 'company-backends '(company-web-slim))
       (add-to-list 'company-backends '(company-ghc))
       (add-to-list 'company-backends '(company-ghci))
       (add-to-list 'company-backends '(company-elm))
-      (add-to-list 'company-backends '(company-alchemist))
+
       (add-to-list 'company-backends '(company-math-symbols-unicode))
       (add-to-list 'company-backends '(company-coq)))
 #+END_SRC
@@ -490,21 +488,14 @@
 
 ** Haskell
 #+BEGIN_SRC emacs-lisp
-  (use-package haskell-mode
+  (use-package haskell-mode :ensure t)
+
+  (use-package intero
     :ensure t
     :config
-    (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation)
-    (add-hook 'haskell-mode-hook 'turn-on-haskell-doc-mode)
-    ;; interactive mode setup
-    (require 'haskell-interactive-mode)
-    (require 'haskell-process)
-    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-    (custom-set-variables
-     '(haskell-process-suggest-remove-import-lines t)
-     '(haskell-process-auto-import-loaded-modules t)
-     '(haskell-process-log t)
-     '(haskell-process-type 'cabal-repl)))
-  (add-to-list 'exec-path "/home/gitten/.cabal/bin")
+    (add-hook 'haskell-mode-hook 'intero-mode))
+
+  ;;  (add-to-list 'exec-path "/home/gitten/.cabal/bin")
 #+END_SRC
 
 ** PureScript
@@ -537,7 +528,8 @@
 
   ;;elixir
   (use-package elixir-mode :ensure t)
-  (use-package alchemist :ensure t)
+  (use-package alchemist :ensure t :config (company-mode 1))
+  ;;(add-to-list 'company-backends '(company-alchemist))
 #+END_SRC
 
 ** LFE (Lisp Flavored Erlang)
@@ -574,16 +566,34 @@
 ** Python
 #+BEGIN_SRC emacs-lisp
   ;;(use-package ein :ensure t) look into ob-ipython
+  (setq python-indent-offset 4)
+  (setq python-shell-completion-native-disabled-interpreters
+        '("ipython3" "ipython" "pypy" "python"))
+
+
+
+
   (use-package jedi
     :ensure t
     :config
+    (use-package company-jedi :ensure t)
+    (add-to-list 'company-backends 'company-jedi)
+    (setq jedi:complete-on-dot t)
     (add-hook 'python-mode-hook 'jedi:setup))
 
-  (use-package virtualenvwrapper
+
+  (use-package elpy
     :ensure t
     :config
-    (venv-initialize-interactive-shells)
-    (setq venv-location "$HOME/.virtualenvs/"))
+    (elpy-enable)
+    (setq elpy-rpc-backend "jedi")
+    ;; (when (executable-find "ipython")
+    ;;   (setq python-shell-interpreter "ipython3"
+    ;;         python-shell-interpreter-args "--simple-prompt --pprint"))
+    (define-key python-mode-map (kbd "RET") 'newline-and-indent))
+
+
+
   (use-package pydoc-info :ensure t) ; :load-path "/path/to/pydoc-info")
   (use-package ein :ensure t)
 #+END_SRC
