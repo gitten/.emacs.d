@@ -233,10 +233,7 @@
 
 ** avy
 #+BEGIN_SRC emacs-lisp
-  (use-package avy 
-    :ensure t
-    :bind
-    )
+  (use-package avy :ensure t)
 #+END_SRC
 * The Org
 #+BEGIN_SRC emacs-lisp
