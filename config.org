@@ -264,6 +264,7 @@
   (setq org-src-tab-acts-natively t)
   (setq org-confirm-babel-evaluate nil)
   (setq org-plantuml-jar-path "~/.emacs.d/plantuml.jar")
+  (setq org-time-clocksum-use-fractional t)
 
 
 
@@ -288,14 +289,15 @@
 
 ** org my life
  #+BEGIN_SRC emacs-lisp
-   (when (file-exists-p "~/the-org-life")
-     (setq org-directory "~/the-org-life")
+   (when (file-exists-p "~/my-org-life")
+     (setq org-directory "~/my-org-life")
      ;;(add-to-list 'load-path (expand-file-name "~/the-org-life"))
      (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
      (setq org-agenda-files 
-                   '("~/the-org-life"
-                     "~/the-org-life/sy"
-                     "~/the-org-life/sy/flora-prj"                   
+                   '("~/my-org-life"
+                     "~/my-org-life/sy"
+                     "~/my-org-life/sy/flora-prj"
+                     "~/my-org-life/jdl"
                      )))
 
    (setq org-clock-persist 'history)
