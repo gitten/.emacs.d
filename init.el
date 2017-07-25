@@ -1,6 +1,8 @@
 (require 'package)
+
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
+
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -14,6 +16,7 @@
 
 (use-package ivy :ensure t
   :config (ivy-mode 1))
+
 (use-package counsel
   :ensure t
   :bind ("C-x C-f" . counsel-find-file))
