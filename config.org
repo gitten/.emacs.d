@@ -1,33 +1,16 @@
 #+title: My Emacs Config
 
-* lisp librairies
-#+BEGIN_SRC emacs-lisp
-  ;;(load "~/.emacs.d/lisp/PG/generic/proof-site")
-  (when (file-exists-p "~/.emacs.d/secrets.el")
-    (load "~/.emacs.d/secrets.el"))
-#+END_SRC
-
-* Paradox package manager
-#+BEGIN_SRC emacs-lisp
-  (use-package paradox
-    :ensure t)
-#+END_SRC
-
-* Helm
-#+BEGIN_SRC emacs-lisp :exports none
-  (use-package helm
-    :ensure t
-    :diminish helm-mode
-    :bind
-    ("M-y" . helm-show-kill-ring))
-
-  (use-package helm-gtags :ensure t)
-#+END_SRC
-
 * General enviornment configs
+  + Move customize config out of init.el
 #+BEGIN_SRC emacs-lisp
-  (setq custom-file "~/.emacs.d/customize-init.el")
+  (setq custom-file (concat user-emacs-directory "customize-config.el"))
+  (unless (file-exists-p custom-file)
+    (write-region "" nil custom-file))
+  (load custom-file)
+#+END_SRC
 
+  + Backups, autosave, and history behavior
+#+BEGIN_SRC emacs-lisp
   (setq backup-directory-alist '((".*" . "~/.emacs.d/backups")))
   (setq delete-old-versions -1)
   (setq version-control t)
@@ -44,15 +27,51 @@
         '(kill-ring
           search-ring
           regexp-search-ring))
+#+END_SRC
 
-
-  ;;interface
+  + Window toolbars
+#+BEGIN_SRC emacs-lisp
   (menu-bar-showhide-tool-bar-menu-customize-disable)
   (scroll-bar-mode -1)
   (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
 
-  ;; no tabs
+  + No tabs
+#+BEGIN_SRC emacs-lisp
   (setq-default indent-tabs-mode nil)
+
+  (put 'narrow-to-region 'disabled nil)
+  (put 'upcase-region 'disabled nil)
+#+END_SRC
+
+  + Easily open config file with function
+#+BEGIN_SRC emacs-lisp
+  (defun dot-config ()
+    "Opens Emacs configuration dot file."
+
+    (interactive)
+    (find-file "~/.emacs.d/config.org"))
+#+END_SRC    
+
+* Emacs Theming
+#+BEGIN_SRC emacs-lisp
+  (use-package mode-icons
+    :ensure t
+    :config
+    (mode-icons-mode))
+
+  (use-package base16-theme :ensure t)
+
+  (use-package nyan-mode
+    :ensure t
+    :config
+    (nyan-mode))
+
+  (setq custom-safe-themes t)
+#+END_SRC
+
+* Convienince
+#+BEGIN_SRC emacs-lisp
   (use-package key-chord
     :ensure t
     :config
@@ -60,7 +79,6 @@
 
   (use-package undo-tree
     :ensure t
-    :demand t
     :diminish undo-tree-mode
     :config 
     (global-undo-tree-mode)) ;;explore more settings 
@@ -75,680 +93,4 @@
     (setq beacon-blink-delay 0.5)
     (setq beacon-blink-duration 0.5)
     (setq beacon-color "#666600"))
-
-  (defun dot-config ()
-    "Opens Emacs configuration dot file."
-
-    (interactive)
-    (find-file "~/.emacs.d/config.org"))
-#+END_SRC
-
-** Key chords
-#+BEGIN_SRC emacs-lisp
-  (key-chord-define-global "FF" 'counsel-find-file)
-#+END_SRC
-
-** Delimiters
-#+BEGIN_SRC emacs-lisp
-  (use-package smartparens
-    :ensure t 
-    :demand t
-    :diminish smartparens-mode
-    :init
-    (require 'smartparens-config)
-
-    (smartparens-global-mode t))
-  ;;heredoc pair
-  ;;(sp-pair "\"\"\"" "\"\""))
-
-  (use-package highlight-parentheses
-    :ensure t
-    :init
-    (define-globalized-minor-mode global-highlight-parentheses-mode
-      highlight-parentheses-mode
-      (lambda ()
-        (highlight-parentheses-mode t)))
-    (global-highlight-parentheses-mode t))
-#+END_SRC
-
-** Welcome screen
-   start with agenda/todo view
-#+BEGIN_SRC emacs-lisp
-  (add-hook 'after-init-hook 
-            '(lambda () 
-               (org-agenda nil "n")
-               (delete-other-windows)))
-#+END_SRC
-* Japanese language support
-#+BEGIN_SRC emacs-lisp
-  (use-package mozc
-    :ensure t
-    :config
-    (setq default-input-methond "japanese-mozc"))
-
-  ;;google translate-region
-  (use-package google-translate
-    :demand t
-    :ensure t
-    :init
-    (require 'google-translate-smooth-ui)
-    (setq google-translate-translation-directions-alist '(("ja" . "en"))
-          google-translate-show-phonetic t)  
-
-    :bind
-    ("C-c t" . google-translate-smooth-translate))
-#+END_SRC
-
-* aboabo goodness
-** Hydra keybind tool
-#+BEGIN_SRC emacs-lisp
-  (use-package hydra :ensure t :demand t)
-
-  (defhydra hydra-zoom (global-map "C-=")
-    "zoom"
-    ("g" text-scale-increase "grow")
-    ("s" text-scale-decrease "shrink")
-    ("o" nil "exit"))
-
-
-  (defun hydra-universal-argument (arg)
-    (interactive "P")
-    (setq prefix-arg (if (consp arg)
-                         (list (* 4 (car arg)))
-                       (if (eq arg '-)
-                           (list -4)
-                         '(4)))))
-
-#+END_SRC
-
-** Ivy completion based packages
-#+BEGIN_SRC emacs-lisp
-  (use-package ivy
-    :ensure t
-    :demand t
-    :init
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-height 20)
-    (setq ivy-extra-directories '("./"))
-    (use-package ivy-hydra :ensure t)
-    :bind
-    ("C-c C-r" . ivy-resume)
-    :config
-    (define-key ivy-minibuffer-map (kbd "C-l") 'backward-kill-word))
-
-  (use-package swiper
-    :ensure t
-    :demand t
-    :bind
-    ("C-s" . swiper)
-    ("C-'" . swiper-all))
-
-  (use-package counsel
-    :ensure t
-    :demand t
-    :config
-    (use-package smex :ensure t)
-    (use-package counsel-projectile :ensure t)
-    :bind
-
-    ("M-x" . counsel-M-x)
-    ("C-c k" . counsel-projectile-ag))
-
-  (use-package ace-window
-    :ensure t
-    :bind
-    ("C-x o" . ace-window)
-    ("M-o" . ace-window)
-    :config
-    (winner-mode t)
-    (set-face-attribute 'aw-leading-char-face t
-                        :foreground "deep sky blue"
-                        :weight 'bold
-                        :height 1.0)
-    (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l)))
-
-  ;; (defhydra hydra-aw 
-  ;;   "ace-window"
-  ;;   ())
-  ;;(?b balance-windows)
-  ;;(?u winner-undo)
-  ;;(?r winpner-redo)))
-  ;;(key-chord-define-global "yy" 'ace-window)
-
-  (global-set-key (kbd "C-c m")
-                  (defhydra hydra-transpose (:color red)
-                    "Transpose"
-                    ("c" transpose-chars "characters")
-                    ("w" transpose-words "words")
-                    ("o" org-transpose-words "Org mode words")
-                    ("l" transpose-lines "lines")
-                    ("s" transpose-sentences "sentences")
-                    ("e" org-transpose-elements "Org mode elements")
-                    ("p" transpose-paragraphs "paragraphs")
-                    ("t" org-table-transpose-table-at-point "Org mode table")
-                    ("q" nil "cancel" :color blue)))
-
-#+END_SRC
-
-** avy
-#+BEGIN_SRC emacs-lisp
-  (use-package avy :ensure t)
-#+END_SRC
-* The Org
-#+BEGIN_SRC emacs-lisp
-  (global-set-key "\C-cl" 'org-store-link)
-  (global-set-key "\C-cc" 'org-capture)
-  (global-set-key "\C-ca" 'org-agenda)
-  (global-set-key "\C-cb" 'org-iswitchb)
-  (setq org-startup-folded 'content)
-  (setq org-html-checkbox-type 'unicode)
-  (setq org-html-checkbox-types
-        '((unicode (on . "<span class=\"task-done\">&#x2611;</span>")
-                   (off . "<span class=\"task-todo\">&#x2610;</span>")
-                   (trans . "<span class=\"task-in-progress\">[-]</span>"))))
-
-  (add-hook 'org-babel-after-execute-hook 'bh/display-inline-images 'append)
-  (defun bh/display-inline-images ()
-    (condition-case nil
-        (org-display-inline-images)
-      (error nil)))
-
-  ;; Always use visual-line-mode in org-mode, and wrap it at column 80.
-  (add-hook
-   'org-mode-hook
-   (lambda ()
-     (turn-on-auto-fill)gettings things done emacs
-     (visual-line-mode)))
-
-  (setq org-src-tab-acts-natively t)
-  (setq org-confirm-babel-evaluate nil)
-  (setq org-plantuml-jar-path "~/.emacs.d/plantuml.jar")
-  (setq org-time-clocksum-use-fractional t)
-
-
-
-  (use-package ox-reveal
-    :ensure t
-    :config
-    (setq org-reveal-root 
-          (concat "file:///" (expand-file-name "~/sources-apps/reveal.js/" ))))
-
-  (use-package org-bullets
-    :ensure t
-    :init
-    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
-  (use-package timesheet :ensure t)
-
-  (use-package worf
-    :ensure t
-    :config
-    (worf-mode 1))
-#+END_SRC
-
-** org my life
- #+BEGIN_SRC emacs-lisp
-   (when (file-exists-p "~/my-org-life")
-     (setq org-directory "~/my-org-life")
-     ;;(add-to-list 'load-path (expand-file-name "~/the-org-life"))
-     (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
-     (setq org-agenda-files 
-                   '("~/my-org-life"
-                     "~/my-org-life/sy"
-                     "~/my-org-life/sy/flora-prj"
-                     "~/my-org-life/jdl"
-                     )))
-
-   (setq org-clock-persist 'history)
-#+END_SRC
-
-** calendar
-#+BEGIN_SRC emacs-lisp
-  (use-package calfw
-    :ensure t
-    :config
-    (require 'calfw-org))
-
-  (use-package org-gcal
-    :ensure t
-    :config
-    (setq org-gcal-client-id my-gcal-client-id
-          org-gcal-client-secret my-gcal-secret
-          org-gcal-file-alist 
-          '(("ferren56@gmail.com" . "~/Dropbox/the-org-life/gcal.org"))))
-
-  (use-package calfw-gcal :ensure t)
-#+END_SRC   
-** org babel
-#+BEGIN_SRC emacs-lisp
-  (use-package ob-elixir :ensure t)
-  (use-package ob-lfe :ensure t)
-  (use-package ox-pandoc 
-    :ensure t
-    :init
-    (add-to-list 'exec-path "~/.local/bin/"))
-
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((plantuml .t)
-     (dot . t)
-     (haskell . t)
-     (elixir . t)
-     (lfe . t)))
-#+END_SRC
-
-** mobile org
-#+BEGIN_SRC emacs-lisp
-  (setq org-mobile-directory "~/Dropbox/mobileorg")
-  (setq org-mobile-inbox-for-pull "~/the-org-life")
-#+END_SRC
-* Auto complete with Company mode
-#+BEGIN_SRC emacs-lisp
-    (use-package company-c-headers :ensure t)
-
-    ;; (use-package company-auctex
-    ;;   :ensure t
-    ;;   :init(company-auctex-init))
-
-
-    (use-package company-web :ensure t)
-    (use-package company-ghc :ensure t)
-    (use-package company-ghci :ensure t)
-  ;;  (use-package company-coq :ensure t)
-
-    ;;(use-package company-racer :ensure t)
-
-    (use-package company
-      :ensure t
-      :demand t
-      :diminish company-mode
-      :config
-      (setq global-company-modes '(not-term-mode))
-  ;;    (setq company-transformers '(company-sort-by-occurence))
-      (setq company-idle-delay 0.2
-            company-minimum-prefix-length 2
-            company-selection-wrap-around t
-            company-show-numbers t
-            company-require-match nil
-            company-dabbrev-downcase nil
-            company-dabbrev-ignore-case nil)
-
-      (add-hook 'dired-mode-hook 'dired-no-company)
-      (defun dired-no-company () (company-mode 0))
-
-      (add-to-list 'company-backends 'company-c-headers)
-
-      (add-to-list 'company-backends '(company-c-headers))
-      (add-to-list 'company-backends '(company-auctex))
-     
-      (add-to-list 'company-backends '(company-web-html))
-      (add-to-list 'company-backends '(company-web-jade))
-      (add-to-list 'company-backends '(company-web-slim))
-      (add-to-list 'company-backends '(company-ghc))
-      (add-to-list 'company-backends '(company-ghci))
-      (add-to-list 'company-backends '(company-elm))
-
-      (add-to-list 'company-backends '(company-math-symbols-unicode))
-      (add-to-list 'company-backends '(company-coq)))
-#+END_SRC
-
-* Syntax checking
-** Flymake
-#+BEGIN_SRC emacs-lisp
-  (use-package flymake-easy :ensure t)
-  (use-package flymake-sass
-    :ensure t
-    :config
-    (add-hook 'sass-mode-hook 'flymake-sass-load))
-
-  (use-package flymake-rust :ensure t)
-#+END_SRC
-
-** flycheck
-#+BEGIN_SRC emacs-lisp
-  (use-package flycheck :ensure t)
-
-  (use-package flycheck-elm 
-    :ensure t
-    :config
-    (add-hook 'flyckeck-mode-hook #'flycheck-elm-setup))
-
-  (defun parse-jslinter-warning (warning)
-    (flycheck-error-new
-     :line (1+ (cdr (assoc 'line warning)))
-     :column (1+ (cdr (assoc 'column warning)))
-     :message (cdr (assoc 'message warning))
-     :level 'error))
-  (defun jslinter-error-parser (output checker buffer)
-    (mapcar 'parse-jslinter-warning
-            (cdr (assoc 'warnings (aref (json-read-from-string output) 0)))))
-  (flycheck-define-checker javascript-jslinter
-    "A JavaScript syntax and style checker based on JSLinter.
-
-  See URL `https://github.com/tensor5/JSLinter'."
-    :command ("/user/local/lib/node_modules/jslinter/jslint" "--raw" source)
-    :error-parser jslinter-error-parser
-    :modes (js-mode js2-mode js3-mode))
-#+END_SRC
-
-** lispy stuff
-#+BEGIN_SRC emacs-lisp
-  (use-package rainbow-delimiters 
-    :ensure t
-    :config 
-    (setq rainbow-delimiters-max-face-count 1)
-    (set-face-attribute 'rainbow-delimiters-depth-1-face nil 
-                        :foreground "dark grey")
-    (set-face-attribute 'rainbow-delimiters-unmatched-face nil 
-                        :foreground "red"
-                        :inherit 'error))
-
-  (use-package lispy :ensure t)
-  (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
-#+END_SRC
-* Document tools
-** latex
-   #+BEGIN_SRC emacs-lisp
-   (require 'preview)
-   #+END_SRC
-* Dev tools
-** shell tools
-#+BEGIN_SRC emacs-lisp
-  (use-package fish-mode :ensure t)
-  (use-package ag :ensure t)
-#+END_SRC
-
-** git
-#+BEGIN_SRC emacs-lisp
-  (use-package magit 
-    :ensure t
-    :config
-    (magit-wip-after-save-mode 1))
-#+END_SRC
-
-** projectile
-#+BEGIN_SRC emacs-lisp
-  (use-package projectile
-    :ensure t
-    :config
-    (setq projectile-completion-system 'ivy)
-    ;; (use-package helm-projectile
-    ;;   :ensure t
-    :bind
-    ("C-c p f" . projectile-find-file))
-
-#+END_SRC
-
-** Idris
-#+BEGIN_SRC emacs-lisp
-  (use-package idris-mode :ensure t)
-#+END_SRC
-
-** Haskell
-#+BEGIN_SRC emacs-lisp
-  (use-package haskell-mode :ensure t)
-
-  (use-package intero
-    :ensure t
-    :config
-    (add-hook 'haskell-mode-hook 'intero-mode))
-
-  ;;  (add-to-list 'exec-path "/home/gitten/.cabal/bin")
-#+END_SRC
-
-** PureScript
-#+BEGIN_SRC emacs-lisp
-  (use-package purescript-mode :ensure t)
-  (use-package repl-toggle :ensure t)
-  (use-package psci
-    :ensure t
-    :config
-    (add-to-list 'rtog/mode-repl-alist '(purescript-mode . psci))
-    (add-hook 'purescript-mode-hook 'inferior-psci-mode))
-
-  (use-package psc-ide
-    :ensure t
-    :config
-    (add-hook 'purescript-mode-hook
-              (lambda ()
-                (psc-ide-mode)
-                (company-mode)
-                (flycheck-mode)
-                (turn-on-purescript-indentation))))
-#+END_SRC
-
-** Elixir and Erlang
-#+BEGIN_SRC emacs-lisp
-  (use-package erlang
-    :ensure t
-    :config
-    (require 'erlang-start))
-
-  ;;elixir
-  (use-package elixir-mode :ensure t)
-  (use-package alchemist :ensure t :config (company-mode 1))
-  ;;(add-to-list 'company-backends '(company-alchemist))
-#+END_SRC
-
-** LFE (Lisp Flavored Erlang)
-#+BEGIN_SRC emacs-lisp
-  (use-package lfe-mode :ensure t)
-#+END_SRC
-
-** Racket
-#+BEGIN_SRC emacs-lisp
-;;  (use-package geiser :ensure t)
-;;  (use-package quack :ensure t)
-  (use-package racket-mode :ensure t)
-#+END_SRC
-
-** Clojure
-#+BEGIN_SRC emacs-lisp
-  (use-package cider 
-    :ensure t
-    :config
-    (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
-    (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode)
-    (add-hook 'clojure-mode-hook #'lispy-mode))
-  ;;    (setq cider-cljs-lein-repl "(do (use 'figwheel-sidecar.repl-api) (start-figwheel!) (cljs-repl))")
-
-  ;; for boot projects
-  ;(add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
-#+END_SRC
-
-** elm
-#+BEGIN_SRC emacs-lisp
-  (use-package elm-mode :ensure t)
-#+END_SRC
-
-** Python
-#+BEGIN_SRC emacs-lisp
-  ;;(use-package ein :ensure t) look into ob-ipython
-  (setq python-indent-offset 4)
-  (setq python-shell-completion-native-disabled-interpreters
-        '("ipython3" "ipython" "pypy" "python"))
-
-
-
-
-  (use-package jedi
-    :ensure t
-    :config
-    (use-package company-jedi :ensure t)
-    (add-to-list 'company-backends 'company-jedi)
-    (setq jedi:complete-on-dot t)
-    (add-hook 'python-mode-hook 'jedi:setup))
-
-
-  (use-package elpy
-    :ensure t
-    :config
-    (elpy-enable)
-    (setq elpy-rpc-backend "jedi")
-    ;; (when (executable-find "ipython")
-    ;;   (setq python-shell-interpreter "ipython3"
-    ;;         python-shell-interpreter-args "--simple-prompt --pprint"))
-    (define-key python-mode-map (kbd "RET") 'newline-and-indent))
-
-
-
-  (use-package pydoc-info :ensure t) ; :load-path "/path/to/pydoc-info")
-  (use-package ein :ensure t)
-#+END_SRC
-
-** C/Cpp lang
-#+BEGIN_SRC emacs-lisp
-  (use-package ctags :ensure t)
-  ;; look at ctags-update too
-
-
-  (use-package ggtags
-    :ensure t
-    :config
-    (add-hook 'cmode-common-hook
-              (lambda ()
-                (when (derived-mode-p 'c-mode 'c++-mode 'java-mide 'asm-mode)
-                  (ggtags-mode 1)))))
-  (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
-  (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
-  (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
-  (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
-  (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
-  (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags)
-  (define-key ggtags-mode-map (kbd "M-,") 'pop-tag-mark)
-#+END_SRC
-
-*** libclang assisted completion
-#+BEGIN_SRC emacs-lisp
-  (use-package irony
-    :ensure t
-    :init
-    (use-package company-irony :ensure t)
-    (add-to-list 'company-backends 'company-irony)
-    :config
-    (add-hook 'c++-mode-hook 'irony-mode)
-    (add-hook 'c-mode-hook 'irony-mode))
-#+END_SRC    
-*** Hydras
-#+BEGIN_SRC emacs-lisp
-  (defhydra hydra-gdb ()
-    "gud-gdb Commands"
-    ("r" gud-run "gud run")
-    ("n" gud-next "gud next")
-    ("s" gud-step "gud step")
-    ("b" gud-break "gud break point")
-    ("c" gud-cont "gud continue")
-    ("w" gdb-many-windows "gdb all windows"))
-#+END_SRC
-
-** Rust
-#+BEGIN_SRC emacs-lisp
-  (use-package rust-mode
-    :ensure t
-    :init
-    (use-package cargo 
-      :ensure t
-      :init
-      (add-to-list 'exec-path "~/.cargo/bin/"))
-    (use-package rustfmt :ensure t)
-    (use-package racer
-      :ensure t
-      :config
-      (setq racer-rust-src-path "~/rust-src/src/")
-      (add-hook 'racer-mode-hook #'eldoc-mode)
-      (add-hook 'racer-mode-hook #'company-mode))
-
-    :config
-    (add-hook 'rust-mode-hook #'racer-mode)
-    (add-hook 'rust-mode-hook #'cargo-minor-mode)
-
-    :bind
-    ("C-c <tab>" . rust-format-buffer))
-#+END_SRC
-
-** GNU R
-#+BEGIN_SRC emacs-lisp
-  (use-package ess :ensure t)
-  (use-package ess-R-data-view :ensure t)
-  (use-package ess-R-object-popup
-    :ensure t
-    :config
-    (define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup))
-#+END_SRC
-
-** web dev
-#+BEGIN_SRC emacs-lisp
-  (use-package sass-mode :ensure t)
-
-  (use-package web-mode
-    :ensure t
-    :config
-    (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-    (add-to-list 'auto-mode-alist '("\\.eex\\'" . web-mode))
-    (setq web-mode-engines-alist '(("django" . "\\.html\\'")))
-    (defun my-web-mode-hook ()
-      "Hooks for Web mode."
-      (setq web-mode-markup-indent-offset 2)
-      (setq web-mod-code-indent-offset 2)
-      (setq web-mode-css-indent-offset 2)
-      (setq web-mode-code-indent-offset 2)
-      (setq web-mode-enable-css-colorization t)
-      (setq web-mode-enable-block-face t)
-      (setq web-mode-enable-part-face t)
-      (setq web-mode-enable-heredoc-fontification t)
-      (setq web-mode-enable-current-element-highlight t)
-      (setq web-mode-enable-current-column-highlight t))
-    ;;(setq web-mode-enable-auto-pairing t)
-
-    (add-hook 'web-mode-hook 'my-web-mode-hook))
-
-  (setq js-indent-level 2)
-#+END_SRC
-
-** arduino
-#+BEGIN_SRC emacs-lisp
-  ;; (use-package arduino-mode
-  ;;   :ensure t
-  ;;   :config
-  ;;   (add-to-list 'load-path "~/.emacs.d/vendor/arduino-mode")
-  ;;   (setq auto-mode-alist (cons '("\\.\\(pde\\|ino\\)$" . arduino-mode) auto-mode-alist))
-  ;;   (autoload 'arduino-mode "arduino-mode" "Arduino editing mode." t))
-#+END_SRC
-
-*** Platformio
-#+BEGIN_SRC emacs-lisp
-(use-package platformio-mode :ensure t)
-#+END_SRC
-
-* Document tools
-#+BEGIN_SRC emacs-lisp
-  (use-package markdown-mode :ensure t)
-#+END_SRC
-
-* Emacs Theming
-#+BEGIN_SRC emacs-lisp
-  (use-package mode-icons
-    :ensure t
-    :init
-    (mode-icons-mode))
-  (use-package base16-theme :ensure t)
-  (use-package nyan-mode
-    :ensure t
-    :init
-    (nyan-mode))
-  (setq custom-safe-themes t)
-  (load "~/.emacs.d/customize-init.el")
-
-  (use-package pretty-lambdada
-    :ensure t
-    :init
-    (global-pretty-lambda-mode))
 #+END_SRC
