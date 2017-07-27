@@ -71,20 +71,30 @@
 #+END_SRC
 
 * Convienince
+** Key Chords
 #+BEGIN_SRC emacs-lisp
   (use-package key-chord
     :ensure t
     :config
     (key-chord-mode 1))
+#+END_SRC
 
+** Undo Tree
+#+BEGIN_SRC emacs-lisp
   (use-package undo-tree
     :ensure t
     :diminish undo-tree-mode
     :config 
     (global-undo-tree-mode)) ;;explore more settings 
+#+END_SRC
 
+** Extend dired functionality
+#+BEGIN_SRC emacs-lisp
   (use-package dired+ :ensure t)
+#+END_SRC
 
+** Hilight point location with Beacon
+#+BEGIN_SRC emacs-lisp
   (use-package beacon 
     :ensure t
     :config
@@ -94,3 +104,38 @@
     (setq beacon-blink-duration 0.5)
     (setq beacon-color "#666600"))
 #+END_SRC
+
+** aboabo goodnesss
+*** Ivy - minibuffer completion
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy 
+     :ensure t
+     :config
+     (ivy-mode 1))
+#+END_SRC
+
+*** Counsel
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel :ensure t)
+#+END_SRC
+
+*** Swiper - isearch alternative
+#+BEGIN_SRC emacs-lisp
+  (use-package swiper :ensure t)
+#+END_SRC
+
+* The Org
+
+* Dev Tools
+
+** Python
+
+** Rust
+
+** Racket
+
+** Elixir
+
+** Haskell
+
+** Elm
