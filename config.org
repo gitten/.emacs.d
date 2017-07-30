@@ -51,7 +51,7 @@
 
     (interactive)
     (find-file "~/.emacs.d/config.org"))
-#+END_SRC    
+#+END_SRC
 
 * Emacs Theming
 #+BEGIN_SRC emacs-lisp
@@ -189,7 +189,8 @@
 (use-package rust-mode 
   :ensure t
   :config
-  (setq rust-format-on-save t))
+  (setq rust-format-on-save t)
+  (add-to-list 'exec-path "~/.cargo/bin"))
 #+END_SRC
 
 *** Package Manager
