@@ -143,6 +143,25 @@
   (add-hook 'dired-mode-hook 'dired-no-company))
 #+END_SRC
 
+** Hydra - mini modal key bindings
+#+BEGIN_SRC emacs-lisp
+(use-package hydra :ensure t)
+#+END_SRC
+
+*** General Hydras for Emacs
+    + Key bindings for text scaling
+#+BEGIN_SRC emacs-lisp
+  (defhydra hydra-zoom (global-map "C-=")
+    "zoom"
+    ("g" text-scale-increase "grow")
+    ("s" text-scale-decrease "shrink")
+    ("o" nil "exit"))
+#+END_SRC
+
+** Paradox - enhanced package management for Emacs
+#+BEGIN_SRC emacs-lisp
+(use-package paradox :ensure t)
+#+END_SRC
 * The Org
 ** General Configs
 #+BEGIN_SRC emacs-lisp
