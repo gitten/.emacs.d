@@ -242,7 +242,8 @@
         :config
         (smartparens-mode 1)
         (setq rust-format-on-save t)
-        (add-to-list 'exec-path "~/.cargo/bin"))
+        (add-to-list 'exec-path "~/.cargo/bin")
+        (setenv "PATH" (concat "~/.cargo/bin" ":" (getenv "PATH"))))
     #+END_SRC
 
 *** Package Manager
@@ -270,6 +271,10 @@
         (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
     #+END_SRC
 
+*** Playground - REPL substitute
+    #+BEGIN_SRC emacs-lisp
+      (use-package rust-playground :ensure t)
+    #+END_SRC
 ** Racket
    #+BEGIN_SRC emacs-lisp
      (use-package racket-mode 
