@@ -210,7 +210,30 @@
    #+END_SRC
 
 ** Python
+   #+BEGIN_SRC emacs-lisp
+     (use-package anaconda-mode
+       :ensure t
+       :config
+       (add-hook 'python-mode-hook #'anaconda-mode)
+       (add-hook 'python-mode-hook #'anaconda-eldoc-mode))
+   #+END_SRC
 
+*** Completion
+    #+BEGIN_SRC emacs-lisp
+      (use-package company-anaconda
+        :ensure t
+        :config
+        (eval-after-load "company"
+          '(add-to-list 'company-backends 'company-anaconda))
+        (add-hook 'python-mode-hook #'anaconda-mode))
+    #+END_SRC
+
+*** Virtual enviornments
+    #+BEGIN_SRC emacs-lisp
+      (use-package pyenv-mode
+        :ensure t
+        :config (pyenv-mode))
+    #+END_SRC
 ** Rust
 *** Major Mode
     #+BEGIN_SRC emacs-lisp
