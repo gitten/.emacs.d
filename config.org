@@ -70,7 +70,7 @@
     (setq custom-safe-themes t)
   #+END_SRC
 
-* Coqnvienince
+* Convienince
 ** Key Chords
    #+BEGIN_SRC emacs-lisp
      (use-package key-chord
