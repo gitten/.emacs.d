@@ -130,15 +130,6 @@
         (global-set-key (kbd "C-S-o") 'counsel-rhythmbox))
     #+END_SRC
 
-
-*** Swiper - isearch alternative
-    #+BEGIN_SRC emacs-lisp
-      (use-package swiper 
-       :ensure t
-       :bind
-
-    #+END_SRC
-
 ** General Autocompletion
    #+BEGIN_SRC emacs-lisp
      (use-package company
