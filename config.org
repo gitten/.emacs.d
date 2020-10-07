@@ -1,13 +1,6 @@
 #+title: My Emacs Config
 
 * General enviornment configs
-  + Move customize config out of init.el
-    #+BEGIN_SRC emacs-lisp
-      (setq custom-file (concat user-emacs-directory "customize-config.el"))
-      (unless (file-exists-p custom-file)
-        (write-region "" nil custom-file))
-      (load custom-file)
-    #+END_SRC
 
   + Backups, autosave, and history behavior
     #+BEGIN_SRC emacs-lisp
@@ -63,6 +56,7 @@
     (use-package base16-theme :ensure t)
 
     (use-package nyan-mode
+      :if window-system
       :ensure t
       :config
       (nyan-mode))
@@ -77,20 +71,6 @@
        :ensure t
        :config
        (key-chord-mode 1))
-   #+END_SRC
-
-** Undo Tree
-   #+BEGIN_SRC emacs-lisp
-     (use-package undo-tree
-       :ensure t
-       :diminish undo-tree-mode
-       :config 
-       (global-undo-tree-mode)) ;;explore more settings 
-   #+END_SRC
-
-** Extend dired functionality
-   #+BEGIN_SRC emacs-lisp
-     (use-package dired+ :ensure t)
    #+END_SRC
 
 ** Hilight point location with Beacon
@@ -110,27 +90,9 @@
     #+BEGIN_SRC emacs-lisp
       (use-package ivy 
         :ensure t
+        :diminish
         :config
-        (ivy-mode 1)
-        (define-key ivy-minibuffer-map (kbd "C-l") 'backward-kill-word)
-        (setq ivy-use-virtual-buffers t)
-        (setq ivy-count-format "(%d/%d) ")
-
-        (global-set-key (kbd "C-c C-r") 'ivy-resume)
-        (global-set-key (kbd "C-s") 'swiper)
-        (global-set-key (kbd "M-x") 'counsel-M-x)
-        (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-        (global-set-key (kbd "<f1> f") 'counsel-describe-function)
-        (global-set-key (kbd "<f1> v") 'counsel-describe-variable)
-        (global-set-key (kbd "<f1> l") 'counsel-find-library)
-        (global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
-        (global-set-key (kbd "<f2> u") 'counsel-unicode-char)
-        (global-set-key (kbd "C-c k") 'counsel-ag)
-        (global-set-key (kbd "C-x l") 'counsel-locate)
-        (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
-
-        ;; Add recent commands to counsel-M-x minibuffer
-        (use-package smex :ensure t))
+        (ivy-mode 1))
     #+END_SRC
 
 ** General Autocompletion
@@ -159,10 +121,6 @@
           ("o" nil "exit"))
       #+END_SRC
 
-** Paradox - enhanced package management for Emacs
-   #+BEGIN_SRC emacs-lisp
-     (use-package paradox :ensure t)
-   #+END_SRC
 ** Delimeter tools
 *** Smartparens - pair management
     #+BEGIN_SRC emacs-lisp
@@ -194,7 +152,7 @@
 
 ** 3rd party packages
 *** Pretty bullets
-    #+BEGIN_SRC emacs-lisp
+    #+BEGIN_SRC 
       (use-package org-bullets
         :ensure t
         :config (add-hook 'org-mode-hook #'org-bullets-mode))
@@ -215,7 +173,8 @@
    #+BEGIN_SRC emacs-lisp
      (use-package elpy
        :ensure t
-       :config (elpy-enable))
+       :init (elpy-enable)
+       (setq elpy-rpc-python-command "python3"))
    #+END_SRC
 ** Rust
 *** Major Mode
