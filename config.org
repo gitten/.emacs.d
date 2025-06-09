@@ -1,4 +1,4 @@
-#+title: My Emacs Config
+#+title: My Emacs Config - ARCHIVED
 
 * General enviornment configs
 
