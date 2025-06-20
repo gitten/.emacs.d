@@ -1,13 +1,12 @@
-;; Move customize config out of init.el
-(setq custom-file (concat user-emacs-directory "customize-init.el"))
-(unless (file-exists-p custom-file)
-  (write-region "" nil custom-file))
-(load custom-file)
-
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
+
+(setq custom-file (concat user-emacs-directory "init-customize.el"))
+(unless (file-exists-p custom-file)
+  (write-region "" nil custom-file))
+(load custom-file)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -18,4 +17,4 @@
 
 
 ;; Load org file config
-(org-babel-load-file (concat user-emacs-directory "config.org"))
+(org-babel-load-file (concat user-emacs-directory "init-config.org"))

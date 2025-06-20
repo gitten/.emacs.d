@@ -1,0 +1,135 @@
+#+title: My Emacs Config
+
+* general env configs
+#+begin_src emacs-lisp
+  (setq visible-bell t)
+  (setq enable-recursive-minibuffers t)
+
+  ;;(which-key-mode 1)
+  ;;from vertico example to try later
+  ;;(setq read-extended-command-predicate #'command-completion-default-include-p)
+  ;;(minibuffer-prompt-properties '(read-only t cursor-intangible t face minibuffer-prompt))
+#+end_src
+
+** Minibuffer
+*** save minibuffer history across restarts
+#+begin_src emacs-lisp
+  (use-package savehist :init (savehist-mode))
+#+end_src
+
+*** VERTical Interactive COmpletion
+- Minimalistic UI for minibuffer
+
+#+begin_src emacs-lisp
+  (use-package vertico :ensure t :init (vertico-mode))
+#+end_src
+
+*** Annotations and icons
+
+**** Marginalia
+#+begin_src emacs-lisp
+  (use-package marginalia
+    :ensure t
+    :bind (:map minibuffer-local-map ("M-A" . marginalia-cycle))
+
+    :init (marginalia-mode))
+#+end_src
+
+**** Nerd icons
+  - maybe try later
+  #+begin_src emacs-lisp :noeval
+    (use-package nerd-icons :ensure t)
+  #+end_src
+  
+#+begin_src emacs-lisp :noeval
+  (use-package nerd-icons-completion
+    :ensure t
+    :after marginalia
+    :config (nerd-icons-completion-mode)
+    :hook (marginalia-mode . nerd-icons-completion-marginalia-setup))
+#+end_src
+
+** In buffer
+*** TRY
+- corfu
+- cape
+- eglot
+ 
+
+** Completion Backend
+#+begin_src emacs-lisp
+  (use-package orderless
+    :ensure t
+    :custom
+    (setq completion-styles '(orderless basic)
+        (completion-category-overrides
+         '((file (styles basic partial-completion))))))
+#+end_src
+
+
+* The Org
+- set the following variables using customize
+  - org-directory
+  - org-agenda-files
+    
+#+begin_src emacs-lisp
+  (use-package org-mode
+    :bind ("C-c a" . org-agenda)
+    :init
+    (setq org-default-notes-file
+  	(expand-file-name "notes.org" org-directory))
+
+    (setq org-log-done 'note)
+    (setq org-log-into-drawer t) ;set to nil per agenda file as needed
+
+    (setq org-agenda-start-on-weekday nil)
+    (setq org-agenda-start-day nil)
+    (setq org-agenda-todo-ignore-scheduled t)
+    (setq org-agenda-todo-ignore-deadlines t)
+    ;;(setq org-agenda-todo-ignore-with-date t) ;excludes all active dates
+   
+    :config
+    (visual-line-mode 1))
+#+end_src
+
+** TRY org-tempo for completion
+
+  
+* Dev Tools
+- try devdocs
+  - from [[https://www.reddit.com/r/emacs/comments/w4gxoa/what_are_some_musthave_packages_for_emacs/][reddit]]
+
+** Guix
+
+*** geiser-guile
+#+begin_src emacs-lisp
+  (use-package geiser-guile :ensure t)
+#+end_src
+
+*** emacs-guix
+#+begin_src emacs-lisp 
+  (use-package guix :ensure t)
+#+end_src    
+
+
+** Git
+#+begin_src emacs-lisp
+(use-package magit :ensure t)
+#+end_src
+
+** Lisp
+#+begin_src emacs-lisp
+  (use-package lispy
+    :ensure t
+    :hook emacs-lisp-mode)
+#+end_src
+
+** clojure
+#+begin_src emacs-lisp
+  (use-package clojure-mode :ensure t)
+#+end_src
+
+*** elgot
+#+begin_src emacs-lisp :noeval
+(add-to-list 'eglot-server-programs '(clojuredart()))
+#+end_src
