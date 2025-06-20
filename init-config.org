@@ -37,11 +37,11 @@
 
 **** Nerd icons
   - maybe try later
-  #+begin_src emacs-lisp :noeval
+  #+begin_src emacs-lisp :tangle no
     (use-package nerd-icons :ensure t)
   #+end_src
   
-#+begin_src emacs-lisp :noeval
+#+begin_src emacs-lisp :tangle no
   (use-package nerd-icons-completion
     :ensure t
     :after marginalia
@@ -130,6 +130,6 @@
 #+end_src
 
 *** elgot
-#+begin_src emacs-lisp :noeval
+#+begin_src emacs-lisp :tangle no
 (add-to-list 'eglot-server-programs '(clojuredart()))
 #+end_src
