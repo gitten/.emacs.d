@@ -127,6 +127,7 @@
 ** clojure
 #+begin_src emacs-lisp
   (use-package clojure-mode :ensure t)
+  (use-package inf-clojure :ensure t)
 #+end_src
 
 *** elgot
