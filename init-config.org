@@ -3,8 +3,9 @@
 * general env configs
 #+begin_src emacs-lisp
   (setq visible-bell t)
+  (setq global-auto-revert-mode t)
   (setq enable-recursive-minibuffers t)
-
+    
   ;;(which-key-mode 1)
   ;;from vertico example to try later
   ;;(setq read-extended-command-predicate #'command-completion-default-include-p)
@@ -76,12 +77,17 @@
   (use-package org-mode
     :bind ("C-c a" . org-agenda)
     :init
+    (add-to-list 'org-modules 'org-tempo)
+    (add-to-list 'org-modules 'org-habit)
     (setq org-default-notes-file
   	(expand-file-name "notes.org" org-directory))
 
-    (setq org-log-done 'note)
+    (setq org-M-RET-may-split-line nil)
+    (setq org-treat-insert-todo-heading-as-state-change t)
     (setq org-log-into-drawer t) ;set to nil per agenda file as needed
-
+    (setq org-log-done 'time)
+    (setq org-log-reschedule 'note)
+    
     (setq org-agenda-start-on-weekday nil)
     (setq org-agenda-start-day nil)
     (setq org-agenda-todo-ignore-scheduled t)
@@ -92,7 +98,7 @@
     (visual-line-mode 1))
 #+end_src
 
-** TRY org-tempo for completion
+** TRYME configs
 
   
 * Dev Tools
