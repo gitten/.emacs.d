@@ -51,8 +51,18 @@
 #+end_src
 
 ** In buffer
+
+*** corfu - COmpletion in Region FUnction
+#+begin_src emacs-lisp
+  (use-package corfu
+    :ensure 
+    :init
+    (setq corfu-auto nil)
+    (global-corfu-mode))
+#+end_src
+
 *** TRY
-- corfu
+
 - cape
 - eglot
  
@@ -76,6 +86,7 @@
 #+begin_src emacs-lisp
   (use-package org-mode
     :bind ("C-c a" . org-agenda)
+    :hook (org-agenda-mode . display-time)
     :init
     (add-to-list 'org-modules 'org-tempo)
     (add-to-list 'org-modules 'org-habit)
@@ -94,7 +105,6 @@
     (setq org-agenda-todo-ignore-deadlines t)
     ;;(setq org-agenda-todo-ignore-with-date t) ;excludes all active dates
    
-    :config
     (visual-line-mode 1))
 #+end_src
 
@@ -127,13 +137,13 @@
 #+begin_src emacs-lisp
   (use-package lispy
     :ensure t
-    :hook emacs-lisp-mode)
+    :hook (emacs-lisp-mode clojure-mode))
 #+end_src
 
 ** clojure
 #+begin_src emacs-lisp
-  (use-package clojure-mode :ensure t)
-  (use-package inf-clojure :ensure t)
+  (use-package clojure-mode :ensure t :mode "\\.repl\\'")
+  (use-package cider :ensure t)
 #+end_src
 
 *** elgot
